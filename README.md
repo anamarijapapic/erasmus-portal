@@ -19,7 +19,7 @@ Erasmus Portal is a web application that aims to facilitate the process of apply
 
 ## Features
 
-TBA
+* [erasmus-portal Wiki: User Stories](https://github.com/anamarijapapic/erasmus-portal/wiki/User-Stories)
 
 ## Technologies
 
