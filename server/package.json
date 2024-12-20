@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./server.js",
-    "devstart": "node ./server.js"
+    "start": "node ./bin/www",
+    "devstart": "node ./bin/www"
   },
   "dependencies": {
     "cors": "^2.8.5",
