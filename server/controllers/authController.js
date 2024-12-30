@@ -7,29 +7,43 @@ const bcrypt = require('bcrypt');
 const sendPasswordResetEmail = require('../utils/mailer.js');
 const Token = require('../models/token.model.js');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
 const login = async (req, res) => {
-  const { error } = loginValidation(req.body);
+  try {
+    const { error } = loginValidation(req.body);
 
-  if (error) return res.status(400).json({ error: error.details[0].message });
+    if (error) return res.status(400).json({ error: error.details[0].message });
 
-  const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email: req.body.email });
 
-  if (!user) {
-    return res.status(400).json({ error: 'Email is not found' });
+    if (!user) {
+      return res.status(400).json({ error: 'Email is not found' });
+    }
+
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+
+    if (!validPassword) {
+      return res.status(400).json({ error: 'Wrong credentials' });
+    }
+
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+
+    res.status(200).json({
+      _id: user._id,
+      email: user.email,
+      token: token,
+      role: user.role,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Login failed' });
   }
-
-  const validPassword = await bcrypt.compare(req.body.password, user.password);
-
-  if (!validPassword) {
-    return res.status(400).json({ error: 'Wrong credentials' });
-  }
-
-  res.status(200).json({
-    _id: user._id,
-    email: req.body.email,
-    role: user.role,
-  });
 };
 
 const forgotPassword = async (req, res) => {
