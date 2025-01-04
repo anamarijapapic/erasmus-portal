@@ -16,11 +16,11 @@ const departmentSchema = new Schema(
       required: true,
       ref: 'User',
     },
-    // institutionId: {
-    //   type: mongoose.Types.ObjectId,
-    //   required: true,
-    //   ref: 'User',
-    // },
+    institutionId: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+      ref: 'Institution',
+    },
   },
   { timestamps: true }
 );

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Department = require('../models/department.model.js');
 const User = require('../models/user.model');
+const Institution = require('../models/institution.model.js');
 
 const checkExistingModel = async (model, id) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -15,7 +16,8 @@ const checkExistingModel = async (model, id) => {
 
 const getAllDepartments = async (req, res) => {
   try {
-    const { institutionId, country } = req.query;
+    const institutionId = req.query.institutionId;
+    const country = req.query.country;
     const filter = {};
 
     if (institutionId) {
@@ -32,9 +34,24 @@ const getAllDepartments = async (req, res) => {
       filter.institutionId = institutionDoc._id;
     }
 
-    const departments = await Department.find(filter).populate('institutionId');
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const totalPages = Math.ceil(
+      (await Department.countDocuments(filter).lean()) /
+        (parseInt(req.query.limit) || 10)
+    );
+    const skip = (page - 1) * limit;
 
-    res.status(200).json(departments);
+    const departments = await Department.find(filter)
+      .skip(skip)
+      .limit(limit)
+      .sort({
+        createdAt: -1,
+      })
+      .populate('institutionId')
+      .lean();
+
+    res.status(200).json({ departments, page, totalPages });
   } catch (error) {
     res
       .status(500)
