@@ -1,10 +1,3 @@
-// GET /departments
-// GET /departments/:departmentId
-// POST /departments
-// PUT /departments/:departmentId
-// DELETE /departments/:departmentId
-// Filter by (e.g. country, institution)
-// Pagination support
 const express = require('express');
 const router = express.Router();
 
