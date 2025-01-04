@@ -7,6 +7,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 const departmentRouter = require('./routes/department');
+const institutionRouter = require('./routes/institutions');
 
 const { connectDB } = require('./config/database');
 
@@ -26,6 +27,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/departments', departmentRouter);
+app.use('/institutions', institutionRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
