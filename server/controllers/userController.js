@@ -8,12 +8,36 @@ const { sendEmail } = require('../utils/mailer');
 const bcrypt = require('bcrypt');
 
 const getUsers = async (req, res) => {
-  // Filter by role
-  const role = req.query.role;
-  const query = role ? { role } : {};
+  // Filters
+  const query = {};
+  if (req.query.role) {
+    query.role = req.query.role;
+  }
+
+  if (req.query.semester) {
+    query.semester = req.query.semester;
+  }
+
+  if (req.query.yearOfStudy) {
+    query.yearOfStudy = req.query.yearOfStudy;
+  }
+
+  // Search
+  if (req.query.search) {
+    query.$or = [
+      { firstName: { $regex: req.query.search, $options: 'i' } },
+      { lastName: { $regex: req.query.search, $options: 'i' } },
+      { email: { $regex: req.query.search, $options: 'i' } },
+    ];
+  }
+
+  // Pagination
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
 
   try {
-    const users = await User.find(query).lean();
+    const users = await User.find(query).skip(skip).limit(limit).lean();
     res.status(200).json(users);
   } catch (error) {
     console.error(error);
