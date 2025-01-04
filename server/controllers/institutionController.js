@@ -57,7 +57,6 @@ const getInstitutions = async (req, res) => {
     const institutions = await Institution.find(query)
       .skip(skip)
       .limit(limit)
-      .lean()
       .sort({
         createdAt: -1,
       })
