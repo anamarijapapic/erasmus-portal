@@ -1,4 +1,4 @@
-var express = require('express');
+const express = require('express');
 const {
   login,
   forgotPassword,
@@ -8,9 +8,7 @@ const {
 const router = express.Router();
 
 router.post('/login', login);
-
 router.post('/forgot-password/', forgotPassword);
-
 router.post('/reset-password/:userID/:token', resetPassword);
 
 module.exports = router;
