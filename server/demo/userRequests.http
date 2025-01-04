@@ -1,0 +1,69 @@
+@hostname = localhost
+@port = {{$dotenv PORT}}
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+###
+
+# @name getUsers
+GET http://{{host}}/users HTTP/1.1
+
+###
+# @prompt userId Id of the user to get
+
+# @name getUser
+GET http://{{host}}/users/{{userId}} HTTP/1.1
+
+###
+
+# @name createUser
+POST http://{{host}}/users HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "dateOfBirth": "1990-01-01",
+  "placeOfBirth": "Split, Croatia",
+  "citizenship": "Croatian",
+  "pinOIB": "01234567891",
+  "idCardNumber": "01234567891",
+  "address": "Example Street 1, 21000 Split, Croatia",
+  "contactNumber": "+385123456",
+  "semester": "1",
+  "yearOfStudy": "1"
+}
+
+###
+# @prompt userId Id of the user to update
+
+# @name updateUser
+PUT http://{{host}}/users/{{userId}} HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "semester": "2",
+  "yearOfStudy": "2"
+}
+
+###
+# @prompt userId Id of the user to change password
+
+# @name changePassword
+
+PUT http://{{host}}/users/{{userId}}/change-password HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "oldPassword": "Password123!",
+  "newPassword": "Password456!",
+  "confirmNewPassword": "Password456!"
+}
+
+
+###
+# @prompt userId Id of the user to delete
+
+# @name deleteUser
+DELETE http://{{host}}/users/{{userId}} HTTP/1.1
