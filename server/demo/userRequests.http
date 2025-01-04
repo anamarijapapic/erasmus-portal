@@ -9,12 +9,6 @@
 GET http://{{host}}/users HTTP/1.1
 
 ###
-# @prompt role Role of the users to get
-
-# @name getUsersByRole
-GET http://{{host}}/users?role={{role}} HTTP/1.1
-
-###
 # @prompt userId Id of the user to get
 
 # @name getUser

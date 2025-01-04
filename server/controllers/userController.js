@@ -34,11 +34,15 @@ const getUsers = async (req, res) => {
   // Pagination
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
+  const totalPages = Math.ceil(
+    (await User.countDocuments(query).lean()) /
+      (parseInt(req.query.limit) || 10)
+  );
   const skip = (page - 1) * limit;
 
   try {
     const users = await User.find(query).skip(skip).limit(limit).lean();
-    res.status(200).json(users);
+    res.status(200).json({ users, page, totalPages });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
