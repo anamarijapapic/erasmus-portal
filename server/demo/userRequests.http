@@ -9,6 +9,12 @@
 GET http://{{host}}/users HTTP/1.1
 
 ###
+# @prompt role Role of the users to get
+
+# @name getUsersByRole
+GET http://{{host}}/users?role={{role}} HTTP/1.1
+
+###
 # @prompt userId Id of the user to get
 
 # @name getUser
@@ -23,16 +29,17 @@ Content-Type: {{contentType}}
 {
   "firstName": "John",
   "lastName": "Doe",
-  "email": "john.doe@example.com",
+  "email": "admin@example.com",
+  "role": "admin",
   "dateOfBirth": "1990-01-01",
   "placeOfBirth": "Split, Croatia",
   "citizenship": "Croatian",
-  "pinOIB": "01234567891",
-  "idCardNumber": "01234567891",
+  "pinOIB": "01234567892",
+  "idCardNumber": "01234567892",
   "address": "Example Street 1, 21000 Split, Croatia",
-  "contactNumber": "+385123456",
-  "semester": "1",
-  "yearOfStudy": "1"
+  "contactNumber": "+38512345678",
+  "semester": "0",
+  "yearOfStudy": "0"
 }
 
 ###

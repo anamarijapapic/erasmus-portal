@@ -8,8 +8,12 @@ const { sendEmail } = require('../utils/mailer');
 const bcrypt = require('bcrypt');
 
 const getUsers = async (req, res) => {
+  // Filter by role
+  const role = req.query.role;
+  const query = role ? { role } : {};
+
   try {
-    const users = await User.find().lean();
+    const users = await User.find(query).lean();
     res.status(200).json(users);
   } catch (error) {
     console.error(error);
