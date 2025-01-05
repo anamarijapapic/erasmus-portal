@@ -2,7 +2,6 @@ var express = require('express');
 
 const {
   getAllSubjectAreas,
-  searchSubjectAreas,
   getSubjectArea,
   createSubjectArea,
   updateSubjectArea,
@@ -12,7 +11,6 @@ const {
 const router = express.Router();
 
 router.get('/', getAllSubjectAreas);
-router.get('/searchSubjectArea/:searchInput/', searchSubjectAreas);
 router.get('/:id', getSubjectArea);
 
 router.post('/', createSubjectArea);

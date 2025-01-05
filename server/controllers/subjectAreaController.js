@@ -1,36 +1,32 @@
-// import User from "../models/UserModel.js";
-
-const mongoose = require('mongoose');
 const SubjectArea = require('../models/subjectArea.model');
 
 const getAllSubjectAreas = async (req, res) => {
-  try {
-    const subjectAreas = await SubjectArea.find()
-      .sort({ createdAt: -1 })
-      .lean();
-
-    res.status(200).json(subjectAreas);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-};
-
-const searchSubjectAreas = async (req, res) => {
   const { searchInput } = req.params;
-  const trimmedSearchInput = searchInput.trim();
-  const searchRegex = new RegExp(trimmedSearchInput, 'i');
-  try {
-    let subjectAreaQuery = {
+  let query = searchInput ? { searchInput } : {};
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const totalPages = Math.ceil(
+    (await SubjectArea.countDocuments(query).lean()) /
+      (parseInt(req.query.limit) || 10)
+  );
+  const skip = (page - 1) * limit;
+  if (searchInput) {
+    const trimmedSearchInput = searchInput.trim();
+    const searchRegex = new RegExp(trimmedSearchInput, 'i');
+    query = {
       $or: [{ name: { $regex: searchRegex } }],
     };
-
-    const areas = await SubjectArea.find(subjectAreaQuery)
+  }
+  try {
+    const subjectAreas = await SubjectArea.find(query)
+      .skip(skip)
+      .limit(limit)
       .sort({
         createdAt: -1,
       })
       .lean();
 
-    res.status(200).json(areas);
+    res.status(200).json({ subjectAreas, page, totalPages });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -96,7 +92,6 @@ const updateSubjectArea = async (req, res) => {
 
 module.exports = {
   getAllSubjectAreas,
-  searchSubjectAreas,
   getSubjectArea,
   createSubjectArea,
   deleteSubjectArea,

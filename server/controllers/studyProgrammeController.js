@@ -1,14 +1,32 @@
-const mongoose = require('mongoose');
 const StudyProgramme = require('../models/studyProgramme.model');
 const SubjectArea = require('../models/subjectArea.model');
+const Department = require('../models/department.model');
 
 const getAllStudyProgrammes = async (req, res) => {
   try {
-    const studyProgammes = await StudyProgramme.find()
-      .sort({ createdAt: -1 })
+    const { departmentId, subjectAreaId, academicEqfLevel } = req.query;
+    const filter = {};
+    if (departmentId) filter.departmentId = departmentId;
+    if (subjectAreaId) filter.subjectAreaId = subjectAreaId;
+    if (academicEqfLevel) filter.academicEqfLevel = academicEqfLevel;
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const totalPages = Math.ceil(
+      (await StudyProgramme.countDocuments(filter).lean()) /
+        (parseInt(req.query.limit) || 10)
+    );
+    const skip = (page - 1) * limit;
+
+    const studyProgammes = await StudyProgramme.find(filter)
+      .skip(skip)
+      .limit(limit)
+      .sort({
+        createdAt: -1,
+      })
       .lean();
 
-    res.status(200).json(studyProgammes);
+    res.status(200).json({ studyProgammes, page, totalPages });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -29,10 +47,13 @@ const createStudyProgramme = async (req, res) => {
   const { departmentId, subjectAreaId, academicEqfLevel } = req.body;
 
   try {
-    //const department = await StudyProgramme.findById(id).lean();
+    const department = await Department.findById(departmentId).lean();
     const subjectArea = await SubjectArea.findById(subjectAreaId).lean();
     if (!subjectArea) {
       return res.status(404).json({ message: 'No subject area found' });
+    }
+    if (!department) {
+      return res.status(404).json({ message: 'No department found' });
     }
     const studyProgramme = await StudyProgramme.create({
       departmentId,
@@ -67,6 +88,15 @@ const updateStudyProgramme = async (req, res) => {
   const { departmentId, subjectAreaId, academicEqfLevel } = req.body;
 
   try {
+    const department = await Department.findById(departmentId).lean();
+    const subjectArea = await SubjectArea.findById(subjectAreaId).lean();
+
+    if (!subjectArea) {
+      return res.status(404).json({ message: 'No subject area found' });
+    }
+    if (!department) {
+      return res.status(404).json({ message: 'No department found' });
+    }
     const updatedStudyProgramme = await StudyProgramme.findByIdAndUpdate(
       id,
       { departmentId, subjectAreaId, academicEqfLevel },
@@ -83,25 +113,8 @@ const updateStudyProgramme = async (req, res) => {
   }
 };
 
-const filterStudyProgrammes = async (req, res) => {
-  const { departmentId, subjectAreaId, academicEqfLevel } = req.query;
-
-  const filter = {};
-  if (departmentId) filter.departmentId = departmentId;
-  if (subjectAreaId) filter.subjectAreaId = subjectAreaId;
-  if (academicEqfLevel) filter.academicEqfLevel = academicEqfLevel;
-
-  try {
-    const studyProgrammes = await StudyProgramme.find(filter).lean();
-    res.status(200).json(studyProgrammes);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 module.exports = {
   getAllStudyProgrammes,
-  filterStudyProgrammes,
   getStudyProgramme,
   createStudyProgramme,
   deleteStudyProgramme,

@@ -2,8 +2,16 @@ const mongoose = require('mongoose');
 
 const studyProgrammeSchema = new mongoose.Schema(
   {
-    departmentId: { type: String, required: true },
-    subjectAreaId: { type: mongoose.Types.ObjectId, ref: 'SubjectArea' },
+    departmentId: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Department',
+      required: true,
+    },
+    subjectAreaId: {
+      type: mongoose.Types.ObjectId,
+      ref: 'SubjectArea',
+      required: true,
+    },
     academicEqfLevel: {
       type: String,
       required: true,
