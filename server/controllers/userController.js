@@ -3,6 +3,7 @@ const {
   userValidation,
 } = require('../validators/validation');
 const User = require('../models/user.model');
+const StudyProgramme = require('../models/studyProgramme.model');
 const generator = require('generate-password');
 const { sendEmail } = require('../utils/mailer');
 const bcrypt = require('bcrypt');
@@ -70,7 +71,6 @@ const createUser = async (req, res) => {
       uppercase: true,
       strict: true,
     });
-    // console.log(password);
 
     req.body.password = password;
 
@@ -79,6 +79,13 @@ const createUser = async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     }
 
+    const studyProgramme = await StudyProgramme.findById(
+      req.body.studyProgrammeId
+    ).lean();
+
+    if (!studyProgramme) {
+      return res.status(404).json({ message: 'No study programme present' });
+    }
     const user = await User.create(req.body);
     res.status(201).json(user);
 

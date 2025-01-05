@@ -1,4 +1,5 @@
 const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi);
 const JoiPasswordComplexity = require('joi-password-complexity');
 const genders = require('../enums/genders.js');
 const roles = require('../enums/roles.js');
@@ -51,7 +52,7 @@ const userValidation = (data) => {
     role: Joi.string()
       .valid(roles.Admin, roles.Student, roles.Staff, roles.Coordinator)
       .default(roles.Student),
-    // studyProgramme: Joi.objectId().required(),
+    studyProgrammeId: Joi.objectId().required(),
   });
 
   return schema.validate(data);

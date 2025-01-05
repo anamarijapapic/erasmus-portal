@@ -70,11 +70,11 @@ const userSchema = new mongoose.Schema(
       enum: Object.values(roles),
       default: roles.Student,
     },
-    // studyProgrammeId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'StudyProgramme',
-    //   required: true,
-    // },
+    studyProgrammeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'StudyProgramme',
+      required: true,
+    },
   },
   { timestamps: true }
 );

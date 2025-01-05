@@ -23,17 +23,18 @@ Content-Type: {{contentType}}
 {
   "firstName": "John",
   "lastName": "Doe",
-  "email": "admin@example.com",
+  "email": "johndoe3@example.com",
   "role": "admin",
   "dateOfBirth": "1990-01-01",
   "placeOfBirth": "Split, Croatia",
   "citizenship": "Croatian",
-  "pinOIB": "01234567892",
-  "idCardNumber": "01234567892",
+  "pinOIB": "01234567895",
+  "idCardNumber": "01234567895",
   "address": "Example Street 1, 21000 Split, Croatia",
-  "contactNumber": "+38512345678",
+  "contactNumber": "+38512345671",
   "semester": "0",
-  "yearOfStudy": "0"
+  "yearOfStudy": "0",
+  "studyProgrammeId":"677ab21e4b5dcc38e41ad2eb"
 }
 
 ###
