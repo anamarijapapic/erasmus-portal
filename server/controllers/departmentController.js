@@ -2,19 +2,7 @@ const mongoose = require('mongoose');
 const Department = require('../models/department.model.js');
 const User = require('../models/user.model');
 const Institution = require('../models/institution.model.js');
-
-const checkExistingModel = async (model, id) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new Error('Id is not valid');
-  }
-
-  const modelExists = await model.findById(id).lean();
-  if (!modelExists) {
-    throw new Error(`No ${model.collection.collectionName} present`);
-  }
-
-  return modelExists;
-};
+const checkExistingModel = require('../utils/helpers.js');
 
 const getAllDepartments = async (req, res) => {
   try {
