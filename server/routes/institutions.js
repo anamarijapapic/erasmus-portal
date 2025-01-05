@@ -1,4 +1,4 @@
-var express = require('express');
+const express = require('express');
 const router = express.Router();
 const institutionController = require('../controllers/institutionController');
 
