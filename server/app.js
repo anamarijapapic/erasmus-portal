@@ -10,6 +10,7 @@ const subjectAreasRouter = require('./routes/subjectAreas');
 const studyProgrammesRouter = require('./routes/studyProgrammes');
 const departmentRouter = require('./routes/department');
 const institutionRouter = require('./routes/institutions');
+const applicationRouter = require('./routes/applications');
 
 const { connectDB } = require('./config/database');
 
@@ -32,6 +33,7 @@ app.use('/studyProgrammes', studyProgrammesRouter);
 app.use('/auth', authRouter);
 app.use('/departments', departmentRouter);
 app.use('/institutions', institutionRouter);
+app.use('/applications', applicationRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

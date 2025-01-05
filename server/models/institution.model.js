@@ -15,7 +15,11 @@ const institutionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    contactPersonId: { type: mongoose.Types.ObjectId, ref: 'User' },
+    contactPersonId: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
     addressInfo: {
       type: String,
       required: true,
