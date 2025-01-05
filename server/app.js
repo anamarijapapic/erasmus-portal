@@ -1,15 +1,19 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
+const subjectAreasRouter = require('./routes/subjectAreas');
+const studyProgrammesRouter = require('./routes/studyProgrammes');
+const departmentRouter = require('./routes/department');
+const institutionRouter = require('./routes/institutions');
 
 const { connectDB } = require('./config/database');
 
-var app = express();
+const app = express();
 connectDB();
 
 // view engine setup
@@ -23,7 +27,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/subjectAreas', subjectAreasRouter);
+app.use('/studyProgrammes', studyProgrammesRouter);
 app.use('/auth', authRouter);
+app.use('/departments', departmentRouter);
+app.use('/institutions', institutionRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
