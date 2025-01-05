@@ -10,8 +10,10 @@ const checkExistingModel = async (model, id) => {
 
   const modelExists = await model.findById(id).lean();
   if (!modelExists) {
-    throw new Error('No contact person present');
+    throw new Error(`No ${model.collection.collectionName} present`);
   }
+
+  return modelExists;
 };
 
 const getAllDepartments = async (req, res) => {
@@ -63,11 +65,7 @@ const getDepartment = async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(404).json({ message: 'Id is not valid' });
-    }
-
-    const department = await Department.findById(id).lean();
+    const department = await checkExistingModel(Department, id);
 
     if (!department) {
       return res.status(404).json({ message: 'No department present' });
@@ -81,8 +79,10 @@ const getDepartment = async (req, res) => {
 
 const createDepartment = async (req, res) => {
   try {
-    const { contactPersonId } = req.body;
+    const { contactPersonId, institutionId } = req.body;
     await checkExistingModel(User, contactPersonId);
+    await checkExistingModel(Institution, institutionId);
+
     const department = await Department.create(req.body);
 
     res.status(200).json(department);
@@ -114,10 +114,14 @@ const deleteDepartment = async (req, res) => {
 const updateDepartment = async (req, res) => {
   try {
     const { id } = req.params;
-    const { contactPersonId } = req.body;
+    const { contactPersonId, institutionId } = req.body;
 
     if (contactPersonId) {
       await checkExistingModel(User, contactPersonId);
+    }
+
+    if (institutionId) {
+      await checkExistingModel(Institution, institutionId);
     }
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
