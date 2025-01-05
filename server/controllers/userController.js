@@ -4,6 +4,8 @@ const {
 } = require('../validators/validation');
 const User = require('../models/user.model');
 const StudyProgramme = require('../models/studyProgramme.model');
+const Department = require('../models/department.model');
+const Institution = require('../models/institution.model');
 const generator = require('generate-password');
 const { sendEmail } = require('../utils/mailer');
 const bcrypt = require('bcrypt');
@@ -15,6 +17,17 @@ const getUsers = async (req, res) => {
     query.role = req.query.role;
   }
 
+  if (req.query.studyProgrammeId) {
+    query.studyProgrammeId = req.query.studyProgrammeId;
+  }
+  if (req.query.departmentId) {
+    query['studyProgrammeId.departmentId._id'] = req.query.departmentId;
+  }
+
+  if (req.query.institutionId) {
+    query['studyProgrammeId.departmentId.institutionId._id'] =
+      req.query.institutionId;
+  }
   if (req.query.semester) {
     query.semester = req.query.semester;
   }
@@ -22,7 +35,7 @@ const getUsers = async (req, res) => {
   if (req.query.yearOfStudy) {
     query.yearOfStudy = req.query.yearOfStudy;
   }
-
+  console.log(req.query);
   // Search
   if (req.query.search) {
     query.$or = [
@@ -42,7 +55,19 @@ const getUsers = async (req, res) => {
   const skip = (page - 1) * limit;
 
   try {
-    const users = await User.find(query).skip(skip).limit(limit).lean();
+    const users = await User.find(query)
+      .populate({
+        path: 'studyProgrammeId', // Populate the studyProgrammeId
+        populate: {
+          path: 'departmentId', // Populate the departmentId within the studyProgramme
+          populate: {
+            path: 'institutionId', // Populate the institutionId within the department
+          },
+        },
+      })
+      .skip(skip)
+      .limit(limit)
+      .lean();
     res.status(200).json({ users, page, totalPages });
   } catch (error) {
     console.error(error);
