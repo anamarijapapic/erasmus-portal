@@ -40,4 +40,7 @@ const sendPasswordResetEmail = (userEmail, link) => {
   sendEmail(userEmail, subject, htmlContent);
 };
 
-module.exports = sendPasswordResetEmail;
+module.exports = {
+  sendEmail,
+  sendPasswordResetEmail,
+};

@@ -37,7 +37,7 @@ const getStudyProgramme = async (req, res) => {
   const studyProgramme = await StudyProgramme.findById(id).lean();
 
   if (!studyProgramme) {
-    return res.status(404).json({ message: 'No subject area present' });
+    return res.status(404).json({ message: 'No study programme present' });
   }
 
   res.status(200).json(studyProgramme);
