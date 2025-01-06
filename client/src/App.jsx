@@ -26,6 +26,9 @@ function App() {
           element={<ResetPassword />}
         />
 
+        {/* User page */}
+        <Route path="/users" element={<Users />} />
+
         {/* 404 page */}
         <Route path="*" element={<NotFound />} />
       </Routes>
