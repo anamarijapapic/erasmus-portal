@@ -1,5 +1,8 @@
 const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi);
 const JoiPasswordComplexity = require('joi-password-complexity');
+const genders = require('../enums/genders.js');
+const roles = require('../enums/roles.js');
 
 const loginValidation = (data) => {
   const schema = Joi.object({
@@ -28,7 +31,35 @@ const passwordValidation = (data) => {
   return passwordSchema.validate(data);
 };
 
+const userValidation = (data) => {
+  const schema = Joi.object({
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+    email: Joi.string().min(6).required().email(),
+    password: JoiPasswordComplexity(complexityOptions),
+    gender: Joi.string()
+      .valid(genders.Male, genders.Female)
+      .default(genders.Male),
+    dateOfBirth: Joi.date().required(),
+    placeOfBirth: Joi.string().required(),
+    citizenship: Joi.string().required(),
+    pinOIB: Joi.string().min(11).required(),
+    idCardNumber: Joi.string().min(9).required(),
+    address: Joi.string().required(),
+    contactNumber: Joi.string().min(6),
+    semester: Joi.number().required(),
+    yearOfStudy: Joi.number().required(),
+    role: Joi.string()
+      .valid(roles.Admin, roles.Student, roles.Staff, roles.Coordinator)
+      .default(roles.Student),
+    studyProgrammeId: Joi.objectId().required(),
+  });
+
+  return schema.validate(data);
+};
+
 module.exports = {
   loginValidation,
   passwordValidation,
+  userValidation,
 };

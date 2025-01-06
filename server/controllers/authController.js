@@ -4,7 +4,7 @@ const {
 } = require('../validators/validation');
 const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
-const sendPasswordResetEmail = require('../utils/mailer.js');
+const { sendPasswordResetEmail } = require('../utils/mailer.js');
 const Token = require('../models/token.model.js');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
@@ -61,7 +61,7 @@ const forgotPassword = async (req, res) => {
       }).save();
     }
 
-    const link = `http://localhost:5173/reset-password/${encodeURIComponent(
+    const link = `http://localhost:5173/auth/reset-password/${encodeURIComponent(
       user._id
     )}/${encodeURIComponent(token.token)}`;
 
@@ -93,10 +93,7 @@ const resetPassword = async (req, res) => {
     if (!token)
       return res.status(400).json({ error: 'Invalid link or expired' });
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-    user.password = hashedPassword;
+    user.password = req.body.password;
 
     await user.save();
     await Token.findByIdAndDelete(token._id);
