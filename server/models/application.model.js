@@ -5,11 +5,11 @@ const statuses = require('../enums/statuses.js');
 const applicationSchema = new Schema(
   {
     userId: { type: mongoose.Types.ObjectId, required: true, ref: 'User' },
-    // mobilityId: {
-    //   type: mongoose.Types.ObjectId,
-    //   required: true,
-    //   ref: 'Mobility',
-    // },
+    mobilityId: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+      ref: 'Mobility',
+    },
     status: {
       type: String,
       enum: Object.values(statuses),

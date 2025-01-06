@@ -1,38 +1,33 @@
 const mongoose = require('mongoose');
 const Application = require('../models/application.model.js');
 const User = require('../models/user.model.js');
-const app = require('../app.js');
-// const Mobility = require('../models/mobility.model.js');
-
-const checkExistingModel = async (model, id) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new Error('Id is not valid');
-  }
-
-  const modelExists = await model.findById(id).lean();
-  if (!modelExists) {
-    throw new Error(`No ${model.collection.collectionName} present`);
-  }
-
-  return modelExists;
-};
+const Mobility = require('../models/mobility.model.js');
+const checkExistingModel = require('../utils/helpers.js');
 
 const getAllApplications = async (req, res) => {
   try {
-    // const mobilityId = req.query.mobilityId;
-
-    // napraviti filter po korisnickoj ulozi;
-
+    const mobilityId = req.query.mobilityId;
     const status = req.query.status;
+    const role = req.query.role;
 
     let filter = {};
 
     if (status) {
       filter.status = status;
     }
-    // if (institutionId) {
-    //   filter.institutionId = institutionId;
-    // }
+    if (mobilityId) {
+      filter.mobilityId = mobilityId;
+    }
+
+    if (role) {
+      const userIds = await User.find({
+        role: role,
+      })
+        .select('_id')
+        .lean();
+
+      filter.userId = { $in: userIds };
+    }
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -48,7 +43,6 @@ const getAllApplications = async (req, res) => {
       .sort({
         createdAt: -1,
       })
-      //   .populate('institutionId')
       .lean();
 
     res.status(200).json({ applications, page, totalPages });
@@ -68,8 +62,7 @@ const getApplication = async (req, res) => {
     if (!application) {
       return res.status(404).json({ message: 'No application present' });
     }
-    console.log('alo');
-    console.log('halo: ', application.status);
+
     res.status(200).json(application);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -77,11 +70,11 @@ const getApplication = async (req, res) => {
 };
 
 const createApplication = async (req, res) => {
-  // provjeriti postoji li vec aplikacija korisnika na tu mobilnost i vidit jel to potrebno opce
+  // provjeriti postoji li vec aplikacija korisnika na tu mobilnost?
   try {
-    const { userId } = req.body;
+    const { userId, mobilityId } = req.body;
     await checkExistingModel(User, userId);
-    // await checkExistingModel(Institution, institutionId);
+    await checkExistingModel(Mobility, mobilityId);
 
     const application = await Application.create(req.body);
 
@@ -114,16 +107,15 @@ const deleteApplication = async (req, res) => {
 const updateApplication = async (req, res) => {
   try {
     const { id } = req.params;
-    // dodati institutionId
-    const { userId } = req.body;
+    const { userId, mobilityId } = req.body;
 
     if (userId) {
       await checkExistingModel(User, userId);
     }
 
-    // if (institutionId) {
-    //   await checkExistingModel(Institution, institutionId);
-    // }
+    if (mobilityId) {
+      await checkExistingModel(Mobility, mobilityId);
+    }
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).json({ message: 'Id is not valid' });
