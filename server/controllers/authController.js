@@ -61,7 +61,7 @@ const forgotPassword = async (req, res) => {
       }).save();
     }
 
-    const link = `http://localhost:5173/reset-password/${encodeURIComponent(
+    const link = `http://localhost:5173/auth/reset-password/${encodeURIComponent(
       user._id
     )}/${encodeURIComponent(token.token)}`;
 
