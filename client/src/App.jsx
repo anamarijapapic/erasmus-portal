@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+// import { useAuth } from './context/AuthContext';
+import CustomNavbar from './components/shared/CustomNavbar';
+import CustomFooter from './components/shared/CustomFooter';
+import Home from './components/home/Home';
+import Login from './components/auth/Login';
+import ForgotPassword from './components/auth/ForgotPassword';
+import ResetPassword from './components/auth/ResetPassword';
+import NotFound from './components/shared/NotFound';
+import Users from './components/users/Users';
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  // const { user } = useAuth();
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <CustomNavbar />
+      <Routes>
+        {/* Home page */}
+        <Route path="/" element={<Home />} />
+
+        {/* Auth pages */}
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+        <Route
+          path="/auth/reset-password/:userId/:token"
+          element={<ResetPassword />}
+        />
+
+        {/* 404 page */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <CustomFooter />
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
