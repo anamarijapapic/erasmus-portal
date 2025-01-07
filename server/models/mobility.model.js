@@ -112,7 +112,7 @@ const validateHostAndHomeConflict = async (doc) => {
         doc.hostStudyProgrammeId,
         doc.homeInstitutionId
       );
-    }p
+    }
   }
 };
 
