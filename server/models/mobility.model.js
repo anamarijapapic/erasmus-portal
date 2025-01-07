@@ -112,7 +112,7 @@ const validateHostAndHomeConflict = async (doc) => {
         doc.hostStudyProgrammeId,
         doc.homeInstitutionId
       );
-    }
+    }p
   }
 };
 
@@ -158,6 +158,40 @@ mobilitySchema.pre('findOneAndUpdate', async function (next) {
   } catch (error) {
     next(error);
   }
+});
+
+mobilitySchema.pre(['find', 'findOne'], function (next) {
+  this.populate([
+    {
+      path: 'homeInstitutionId',
+      model: 'Institution',
+    },
+    {
+      path: 'hostStudyProgrammeId',
+      model: 'StudyProgramme',
+      populate: [
+        {
+          path: 'departmentId',
+          model: 'Department',
+          populate: [
+            {
+              path: 'contactPersonId',
+              model: 'User',
+            },
+            {
+              path: 'institutionId',
+              model: 'Institution',
+            },
+          ],
+        },
+        {
+          path: 'subjectAreaId',
+          model: 'SubjectArea',
+        },
+      ],
+    },
+  ]);
+  next();
 });
 
 const Mobility = mongoose.model('Mobility', mobilitySchema);
