@@ -1,0 +1,46 @@
+@hostname = localhost
+@port = {{$dotenv PORT}}
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+###
+
+# @name getStudyProgrammes
+GET http://{{host}}/studyProgrammes HTTP/1.1
+
+###
+# @prompt studyProgrammeId Id of the study programme to get
+
+# @name getStudyProgramme
+GET http://{{host}}/studyProgrammes/{{studyProgrammeId}} HTTP/1.1
+
+###
+
+# @name createStudyProgramme
+POST http://{{host}}/studyProgrammes HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "name": "Software Engineering",
+  "departmentId": "677c1dd31cb0947312878e2f",
+  "subjectAreaId": "677c1b7e1cb0947312878e1d",
+  "academicEqfLevel": "Level 7"
+}
+
+###
+# @prompt studyProgrammeId Id of the study programme to update
+
+# @name updateStudyProgramme
+PUT http://{{host}}/studyProgrammes/{{studyProgrammeId}} HTTP/1.1
+
+Content-Type: {{contentType}}
+
+{
+  "academicEqfLevel": "Level 8"
+}
+
+###
+# @prompt studyProgrammeId Id of the study programme to delete
+
+# @name deleteStudyProgramme
+DELETE http://{{host}}/studyProgrammes/{{studyProgrammeId}} HTTP/1.1

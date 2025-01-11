@@ -1,0 +1,46 @@
+@hostname = localhost
+@port = {{$dotenv PORT}}
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+###
+
+# @name getDepartments
+GET http://{{host}}/departments HTTP/1.1
+
+###
+# @prompt departmenId Id of the department to get
+
+# @name getDepartment
+GET http://{{host}}/departments/{{departmenId}} HTTP/1.1
+
+###
+
+# @name createDepartment
+POST http://{{host}}/departments HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "name": "Department of Computer Science",
+  "address": "Example Street 1, 21000 Split, Croatia",
+  "contactPersonId": "677c1a031cb0947312878e19",
+  "institutionId": "677c48dd0e7a08851bd0cdff"
+}
+
+###
+# @prompt departmenId Id of the department to update
+
+# @name updateDepartment
+PUT http://{{host}}/departments/{{departmenId}} HTTP/1.1
+
+Content-Type: {{contentType}}
+
+{
+  "name": "Department of Medicine",
+}
+
+###
+# @prompt departmenId Id of the department to delete
+
+# @name deleteDepartment
+DELETE http://{{host}}/departments/{{departmenId}} HTTP/1.1

@@ -52,7 +52,7 @@ const userValidation = (data) => {
     role: Joi.string()
       .valid(roles.Admin, roles.Student, roles.Staff, roles.Coordinator)
       .default(roles.Student),
-    studyProgrammeId: Joi.objectId().required(),
+    studyProgrammeId: Joi.objectId().allow(null),
   });
 
   return schema.validate(data);
