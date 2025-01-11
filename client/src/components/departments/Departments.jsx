@@ -15,11 +15,13 @@ import {
 import useEditDepartment from '../../hooks/departments/useEditDepartment';
 import EditDepartmentModal from './EditDepartmentModal';
 import useDeleteDepartment from '../../hooks/departments/useDeleteDepartment';
+import useGetInstitutions from '../../hooks/institutions/useGetInstitutions';
 
 const Departments = () => {
   const [institutionFilter, setInstitutionFilter] = useState('');
   const [countryFilter, setCountryFilter] = useState('');
   const [limit, setLimit] = useState(10);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const {
     departments,
@@ -28,6 +30,8 @@ const Departments = () => {
     onPageChange,
     refreshDepartments,
   } = useGetDepartments(institutionFilter, countryFilter, limit);
+
+  const { institutions } = useGetInstitutions(searchQuery, '', null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
@@ -179,10 +183,11 @@ const Departments = () => {
                 onChange={handleInstitutionChange}
               >
                 <option value="">All Institutions</option>
-                <option value="admin">Admin</option>
-                <option value="student">Student</option>
-                <option value="staff">Staff</option>
-                <option value="coordinator">Coordinator</option>
+                {institutions.map((institution) => (
+                  <option key={institution._id} value={institution._id}>
+                    {institution.name}{' '}
+                  </option>
+                ))}
               </Select>
             </div>
             <div className="max-w-md">
@@ -195,12 +200,15 @@ const Departments = () => {
                 onChange={handleCountryChange}
               >
                 <option value="">All Countries</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
+                {[
+                  ...new Set(
+                    institutions.map((institution) => institution.country)
+                  ),
+                ].map((country) => (
+                  <option key={country} value={country}>
+                    {country}
+                  </option>
+                ))}
               </Select>
             </div>
             <div className="max-w-md">
