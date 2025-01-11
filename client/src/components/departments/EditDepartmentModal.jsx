@@ -4,6 +4,7 @@ const EditDepartmentModal = ({
   isOpen,
   onClose,
   department,
+  institutions,
   onChange,
   onSubmit,
 }) => {
@@ -44,12 +45,20 @@ const EditDepartmentModal = ({
           </div>
           <div>
             <Label htmlFor="institutionId" value="Institution" />
-            <TextInput
+            <Select
               id="institutionId"
               name="institutionId"
               value={department.institutionId._id}
               onChange={onChange}
-            />
+              required
+            >
+              <option value="">Select a Institution</option>
+              {institutions.map((institution) => (
+                <option key={institution._id} value={institution._id}>
+                  {institution.name}
+                </option>
+              ))}
+            </Select>
           </div>
           <Button type="submit">Save</Button>
         </form>

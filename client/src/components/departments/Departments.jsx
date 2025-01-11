@@ -298,6 +298,7 @@ const Departments = () => {
         isOpen={isCreateModalOpen}
         onClose={closeCreateModal}
         department={newDepartment}
+        institutions={institutions}
         onChange={handleCreateDepartmentChange}
         onSubmit={handleCreateDepartmentSubmit}
       />
@@ -306,6 +307,7 @@ const Departments = () => {
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
         department={editDepartment}
+        institutions={institutions}
         onChange={handleEditDepartmentChange}
         onSubmit={handleEditDepartmentSubmit}
       />
