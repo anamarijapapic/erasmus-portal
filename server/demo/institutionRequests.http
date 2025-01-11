@@ -1,0 +1,46 @@
+@hostname = localhost
+@port = {{$dotenv PORT}}
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+###
+
+# @name getInstitutions
+GET http://{{host}}/institutions HTTP/1.1
+
+###
+# @prompt institutionId Id of the institution to get
+
+# @name getInstitution
+GET http://{{host}}/institutions/{{institutionId}} HTTP/1.1
+
+###
+
+# @name createInstitution
+POST http://{{host}}/institutions HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "name": "University of Split",
+  "erasmusCode": "SLO SPLIT01",
+  "country": "Slovenia",
+  "address": "R. Boškovića 32, 21000 Split, Croatia",
+  "contactPersonId": "677c1a031cb0947312878e19"
+}
+
+###
+# @prompt institutionId Id of the institution to update
+
+# @name updateInstitution
+PUT http://{{host}}/institutions/{{institutionId}} HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "erasmusCode": "HR SPLIT02",
+}
+
+###
+# @prompt institutionId Id of the institution to delete
+
+# @name deleteInstitution
+DELETE http://{{host}}/institutions/{{institutionId}} HTTP/1.1

@@ -25,6 +25,16 @@ const departmentSchema = new Schema(
   { timestamps: true }
 );
 
+departmentSchema.pre(['find', 'findOne'], function (next) {
+  this.populate('contactPersonId').populate({
+    path: 'institutionId',
+    populate: {
+      path: 'contactPersonId',
+    },
+  });
+  next();
+});
+
 const Department = mongoose.model('Department', departmentSchema);
 
 module.exports = Department;

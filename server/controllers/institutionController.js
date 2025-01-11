@@ -4,8 +4,7 @@ const Institution = require('../models/institution.model.js');
 
 const createInstitution = async (req, res) => {
   try {
-    const { name, erasmusCode, country, contactPersonId, addressInfo } =
-      req.body;
+    const { name, erasmusCode, country, contactPersonId, address } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(contactPersonId)) {
       return res.status(404).json({ message: 'Id is not valid' });
@@ -21,7 +20,7 @@ const createInstitution = async (req, res) => {
       erasmusCode,
       country,
       contactPersonId,
-      addressInfo,
+      address,
     });
     res.status(200).json(institution);
   } catch (error) {

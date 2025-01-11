@@ -1,0 +1,43 @@
+@hostname = localhost
+@port = {{$dotenv PORT}}
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+###
+
+# @name getSubjectAreas
+GET http://{{host}}/subjectAreas HTTP/1.1
+
+###
+
+# @prompt subjectAreaId Id of the subject area to get
+
+# @name getSubjectArea
+GET http://{{host}}/subjectAreas/{{subjectAreaId}} HTTP/1.1
+
+###
+
+# @name createSubjectArea
+POST http://{{host}}/subjectAreas HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "name": "Mathematics"
+}
+
+###
+# @prompt subjectAreaId Id of the subject area to update
+
+# @name updateSubjectArea
+PUT http://{{host}}/subjectAreas/{{subjectAreaId}} HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "name": "Medicine"
+}
+
+###
+# @prompt subjectAreaId Id of the subject area to delete
+
+# @name deleteSubjectArea
+DELETE http://{{host}}/subjectAreas/{{subjectAreaId}} HTTP/1.1

@@ -2,48 +2,44 @@ const {
   passwordValidation,
   userValidation,
 } = require('../validators/validation');
+const checkExistingModel = require('../utils/helpers.js');
+const { sendEmail } = require('../utils/mailer');
 const User = require('../models/user.model');
 const StudyProgramme = require('../models/studyProgramme.model');
 const Department = require('../models/department.model');
 const Institution = require('../models/institution.model');
 const generator = require('generate-password');
-const { sendEmail } = require('../utils/mailer');
 const bcrypt = require('bcrypt');
 
 const getUsers = async (req, res) => {
   try {
-    // Fetch all with nested population
-    const allUsers = await User.find()
-      .populate({
-        path: 'studyProgrammeId',
-        populate: {
-          path: 'departmentId',
-          populate: {
-            path: 'institutionId',
-          },
-        },
-      })
-      .lean();
+    // Fetch all
+    const allUsers = await User.find().lean();
 
     // Filter
     let users = allUsers.filter((user) => {
       const role = req.query.role ? user.role === req.query.role : true;
+
       const semester = req.query.semester
         ? user.semester.toString() === req.query.semester
         : true;
+
       const yearOfStudy = req.query.yearOfStudy
         ? user.yearOfStudy.toString() === req.query.yearOfStudy
         : true;
+
       const studyProgrammeId = req.query.studyProgrammeId
         ? user.studyProgrammeId &&
           user.studyProgrammeId._id.toString() === req.query.studyProgrammeId
         : true;
+
       const departmentId = req.query.departmentId
         ? user.studyProgrammeId &&
           user.studyProgrammeId.departmentId &&
           user.studyProgrammeId.departmentId._id.toString() ===
             req.query.departmentId
         : true;
+
       const institutionId = req.query.institutionId
         ? user.studyProgrammeId &&
           user.studyProgrammeId.departmentId &&
@@ -65,6 +61,7 @@ const getUsers = async (req, res) => {
     // Search
     if (req.query.search) {
       const search = req.query.search.toLowerCase();
+
       users = users.filter(
         (user) =>
           user.firstName.toLowerCase().includes(search) ||
@@ -79,8 +76,8 @@ const getUsers = async (req, res) => {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const total = users.length;
-
     const totalPages = Math.ceil(total / limit);
+
     users = users.slice(startIndex, endIndex);
 
     res.status(200).json({ users, page, totalPages });
@@ -118,14 +115,12 @@ const createUser = async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const studyProgramme = await StudyProgramme.findById(
-      req.body.studyProgrammeId
-    ).lean();
-
-    if (!studyProgramme) {
-      return res.status(404).json({ message: 'No study programme present' });
+    if (req.body.studyProgrammeId) {
+      await checkExistingModel(StudyProgramme, req.body.studyProgrammeId);
     }
+
     const user = await User.create(req.body);
+
     res.status(201).json(user);
 
     // Send password to user's email
@@ -150,6 +145,10 @@ const updateUser = async (req, res) => {
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (req.body.studyProgrammeId) {
+      await checkExistingModel(StudyProgramme, req.body.studyProgrammeId);
     }
 
     res.status(200).json(user);
