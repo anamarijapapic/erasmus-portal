@@ -7,6 +7,7 @@ import Login from './components/auth/Login';
 import ForgotPassword from './components/auth/ForgotPassword';
 import ResetPassword from './components/auth/ResetPassword';
 import NotFound from './components/shared/NotFound';
+import Departments from './components/departments/departments';
 // import Users from './components/users/Users';
 
 function App() {
@@ -25,6 +26,8 @@ function App() {
           path="/auth/reset-password/:userId/:token"
           element={<ResetPassword />}
         />
+
+        <Route path="/departments" element={<Departments />} />
 
         {/* 404 page */}
         <Route path="*" element={<NotFound />} />
