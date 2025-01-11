@@ -160,6 +160,40 @@ mobilitySchema.pre('findOneAndUpdate', async function (next) {
   }
 });
 
+mobilitySchema.pre(['find', 'findOne'], function (next) {
+  this.populate([
+    {
+      path: 'homeInstitutionId',
+      model: 'Institution',
+    },
+    {
+      path: 'hostStudyProgrammeId',
+      model: 'StudyProgramme',
+      populate: [
+        {
+          path: 'departmentId',
+          model: 'Department',
+          populate: [
+            {
+              path: 'contactPersonId',
+              model: 'User',
+            },
+            {
+              path: 'institutionId',
+              model: 'Institution',
+            },
+          ],
+        },
+        {
+          path: 'subjectAreaId',
+          model: 'SubjectArea',
+        },
+      ],
+    },
+  ]);
+  next();
+});
+
 const Mobility = mongoose.model('Mobility', mobilitySchema);
 
 module.exports = Mobility;
