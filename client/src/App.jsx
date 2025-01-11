@@ -8,6 +8,7 @@ import ForgotPassword from './components/auth/ForgotPassword';
 import ResetPassword from './components/auth/ResetPassword';
 import NotFound from './components/shared/NotFound';
 // import Users from './components/users/Users';
+import Institutitons from './components/institutions/Institutions';
 
 function App() {
   // const { user } = useAuth();
@@ -25,6 +26,8 @@ function App() {
           path="/auth/reset-password/:userId/:token"
           element={<ResetPassword />}
         />
+        {/*Institution page */}
+        <Route path="/institutions" element={<Institutitons />} />
 
         {/* 404 page */}
         <Route path="*" element={<NotFound />} />
