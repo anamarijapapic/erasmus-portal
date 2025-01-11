@@ -52,6 +52,20 @@ const CustomNavbar = () => {
             {({ isActive }) => (
               <Navbar.Link as="div" active={isActive}>
                 Subject areas
+                </Navbar.Link>
+            )}
+          </NavLink>
+          <NavLink to="/departments">
+            {({ isActive }) => (
+              <Navbar.Link as="div" active={isActive}>
+                Departments
+              </Navbar.Link>
+            )}
+          </NavLink>
+          <NavLink to="/institutions">
+            {({ isActive }) => (
+              <Navbar.Link as="div" active={isActive}>
+                Institutions
               </Navbar.Link>
             )}
           </NavLink>
