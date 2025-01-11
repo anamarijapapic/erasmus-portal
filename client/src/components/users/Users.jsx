@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import useGetUsers from '../../hooks/users/useGetUsers';
 import useCreateUser from '../../hooks/users/useCreateUser';
+import useEditUser from '../../hooks/users/useEditUser';
 import {
   Table,
   Pagination,
@@ -12,6 +13,7 @@ import {
 import { HiSearch } from 'react-icons/hi';
 import UserDetailsModal from './UserDetailsModal';
 import CreateUserModal from './CreateUserModal';
+import EditUserModal from './EditUserModal';
 
 const Users = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,7 +52,11 @@ const Users = () => {
     studyProgrammeId: '',
   });
 
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editUser, setEditUser] = useState(null);
+
   const { createUser } = useCreateUser();
+  const { editUser: updateUser } = useEditUser();
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -107,9 +113,27 @@ const Users = () => {
     });
   };
 
+  const openEditModal = (user) => {
+    setEditUser(user);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditUser(null);
+  };
+
   const handleCreateUserChange = (event) => {
     const { name, value } = event.target;
     setNewUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
+  };
+
+  const handleEditUserChange = (event) => {
+    const { name, value } = event.target;
+    setEditUser((prevUser) => ({
       ...prevUser,
       [name]: value,
     }));
@@ -124,6 +148,18 @@ const Users = () => {
 
     await createUser(newUser);
     closeCreateModal();
+    refreshUsers();
+  };
+
+  const handleEditUserSubmit = async (event) => {
+    event.preventDefault();
+
+    if (editUser.studyProgrammeId === '') {
+      delete editUser.studyProgrammeId;
+    }
+
+    await updateUser(editUser);
+    closeEditModal();
     refreshUsers();
   };
 
@@ -279,6 +315,12 @@ const Users = () => {
                       >
                         Details
                       </button>
+                      <button
+                        className="button"
+                        onClick={() => openEditModal(user)}
+                      >
+                        Edit
+                      </button>
                     </Table.Cell>
                   </Table.Row>
                 ))}
@@ -305,6 +347,14 @@ const Users = () => {
         user={newUser}
         onChange={handleCreateUserChange}
         onSubmit={handleCreateUserSubmit}
+      />
+
+      <EditUserModal
+        isOpen={isEditModalOpen}
+        onClose={closeEditModal}
+        user={editUser}
+        onChange={handleEditUserChange}
+        onSubmit={handleEditUserSubmit}
       />
     </>
   );
