@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import useGetUsers from '../../hooks/users/useGetUsers';
+import useCreateUser from '../../hooks/users/useCreateUser';
 import {
   Table,
   Pagination,
   TextInput,
   Label,
   Select,
-  Modal,
   Button,
 } from 'flowbite-react';
 import { HiSearch } from 'react-icons/hi';
+import UserDetailsModal from './UserDetailsModal';
+import CreateUserModal from './CreateUserModal';
 
 const Users = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -17,16 +19,38 @@ const Users = () => {
   const [semesterFilter, setSemesterFilter] = useState('');
   const [yearOfStudyFilter, setYearOfStudyFilter] = useState('');
   const [limit, setLimit] = useState(10);
-  const { users, currentPage, totalPages, onPageChange } = useGetUsers(
-    searchQuery,
-    roleFilter,
-    semesterFilter,
-    yearOfStudyFilter,
-    limit
-  );
+  const { users, currentPage, totalPages, onPageChange, refreshUsers } =
+    useGetUsers(
+      searchQuery,
+      roleFilter,
+      semesterFilter,
+      yearOfStudyFilter,
+      limit
+    );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [newUser, setNewUser] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    gender: '',
+    dateOfBirth: '',
+    placeOfBirth: '',
+    citizenship: '',
+    pinOIB: '',
+    idCardNumber: '',
+    address: '',
+    contactNumber: '',
+    semester: '',
+    yearOfStudy: '',
+    role: '',
+    studyProgrammeId: '',
+  });
+
+  const { createUser } = useCreateUser();
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -56,6 +80,51 @@ const Users = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedUser(null);
+  };
+
+  const openCreateModal = () => {
+    setIsCreateModalOpen(true);
+  };
+
+  const closeCreateModal = () => {
+    setIsCreateModalOpen(false);
+    setNewUser({
+      firstName: '',
+      lastName: '',
+      email: '',
+      gender: '',
+      dateOfBirth: '',
+      placeOfBirth: '',
+      citizenship: '',
+      pinOIB: '',
+      idCardNumber: '',
+      address: '',
+      contactNumber: '',
+      semester: '',
+      yearOfStudy: '',
+      role: '',
+      studyProgrammeId: '',
+    });
+  };
+
+  const handleCreateUserChange = (event) => {
+    const { name, value } = event.target;
+    setNewUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
+  };
+
+  const handleCreateUserSubmit = async (event) => {
+    event.preventDefault();
+
+    if (newUser.studyProgrammeId === '') {
+      delete newUser.studyProgrammeId;
+    }
+
+    await createUser(newUser);
+    closeCreateModal();
+    refreshUsers();
   };
 
   return (
@@ -147,7 +216,7 @@ const Users = () => {
             </div>
           </div>
           <div className="flex justify-end">
-            <button className="button">Create User</button>
+            <Button onClick={openCreateModal}>Create User</Button>
           </div>
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <Table hoverable>
@@ -224,67 +293,19 @@ const Users = () => {
         </div>
       </section>
 
-      {selectedUser && (
-        <Modal show={isModalOpen} onClose={closeModal}>
-          <Modal.Header>User Details</Modal.Header>
-          <Modal.Body>
-            <div className="space-y-6">
-              <p>
-                <strong>First Name:</strong> {selectedUser.firstName}
-              </p>
-              <p>
-                <strong>Last Name:</strong> {selectedUser.lastName}
-              </p>
-              <p>
-                <strong>Email:</strong> {selectedUser.email}
-              </p>
-              <p>
-                <strong>Gender:</strong> {selectedUser.gender}
-              </p>
-              <p>
-                <strong>Date of Birth:</strong>{' '}
-                {new Date(selectedUser.dateOfBirth).toLocaleDateString()}
-              </p>
-              <p>
-                <strong>Place of Birth:</strong> {selectedUser.placeOfBirth}
-              </p>
-              <p>
-                <strong>Citizenship:</strong> {selectedUser.citizenship}
-              </p>
-              <p>
-                <strong>PIN/OIB:</strong> {selectedUser.pinOIB}
-              </p>
-              <p>
-                <strong>ID Card Number:</strong> {selectedUser.idCardNumber}
-              </p>
-              <p>
-                <strong>Address:</strong> {selectedUser.address}
-              </p>
-              <p>
-                <strong>Contact Number:</strong> {selectedUser.contactNumber}
-              </p>
-              <p>
-                <strong>Semester:</strong> {selectedUser.semester}
-              </p>
-              <p>
-                <strong>Year of Study:</strong> {selectedUser.yearOfStudy}
-              </p>
-              <p>
-                <strong>Role:</strong> {selectedUser.role}
-              </p>
-              <p>
-                <strong>Study Program:</strong>{' '}
-                {selectedUser.studyProgrammeId
-                  ? selectedUser.studyProgrammeId.name
-                  : ''}
-              </p>
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={closeModal}>Close</Button>
-          </Modal.Footer>
-        </Modal>
-      )}
+      <UserDetailsModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        user={selectedUser}
+      />
+
+      <CreateUserModal
+        isOpen={isCreateModalOpen}
+        onClose={closeCreateModal}
+        user={newUser}
+        onChange={handleCreateUserChange}
+        onSubmit={handleCreateUserSubmit}
+      />
     </>
   );
 };
