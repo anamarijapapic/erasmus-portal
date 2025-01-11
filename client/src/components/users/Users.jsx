@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import useGetUsers from '../../hooks/users/useGetUsers';
-import { Table, Pagination, TextInput, Label, Select } from 'flowbite-react';
+import {
+  Table,
+  Pagination,
+  TextInput,
+  Label,
+  Select,
+  Modal,
+  Button,
+} from 'flowbite-react';
 import { HiSearch } from 'react-icons/hi';
 
 const Users = () => {
@@ -16,6 +24,9 @@ const Users = () => {
     yearOfStudyFilter,
     limit
   );
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -35,6 +46,16 @@ const Users = () => {
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
+  };
+
+  const openModal = (user) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedUser(null);
   };
 
   return (
@@ -151,6 +172,7 @@ const Users = () => {
                 <Table.HeadCell>Semester</Table.HeadCell>
                 <Table.HeadCell>Year of Study</Table.HeadCell>
                 <Table.HeadCell>Role</Table.HeadCell>
+                <Table.HeadCell>Study Program</Table.HeadCell>
                 <Table.HeadCell>
                   <span className="sr-only">Edit</span>
                 </Table.HeadCell>
@@ -179,7 +201,15 @@ const Users = () => {
                     <Table.Cell>{user.yearOfStudy}</Table.Cell>
                     <Table.Cell>{user.role}</Table.Cell>
                     <Table.Cell>
-                      <button className="button">Edit</button>
+                      {user.studyProgrammeId ? user.studyProgrammeId.name : ''}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <button
+                        className="button"
+                        onClick={() => openModal(user)}
+                      >
+                        Details
+                      </button>
                     </Table.Cell>
                   </Table.Row>
                 ))}
@@ -193,6 +223,68 @@ const Users = () => {
           />
         </div>
       </section>
+
+      {selectedUser && (
+        <Modal show={isModalOpen} onClose={closeModal}>
+          <Modal.Header>User Details</Modal.Header>
+          <Modal.Body>
+            <div className="space-y-6">
+              <p>
+                <strong>First Name:</strong> {selectedUser.firstName}
+              </p>
+              <p>
+                <strong>Last Name:</strong> {selectedUser.lastName}
+              </p>
+              <p>
+                <strong>Email:</strong> {selectedUser.email}
+              </p>
+              <p>
+                <strong>Gender:</strong> {selectedUser.gender}
+              </p>
+              <p>
+                <strong>Date of Birth:</strong>{' '}
+                {new Date(selectedUser.dateOfBirth).toLocaleDateString()}
+              </p>
+              <p>
+                <strong>Place of Birth:</strong> {selectedUser.placeOfBirth}
+              </p>
+              <p>
+                <strong>Citizenship:</strong> {selectedUser.citizenship}
+              </p>
+              <p>
+                <strong>PIN/OIB:</strong> {selectedUser.pinOIB}
+              </p>
+              <p>
+                <strong>ID Card Number:</strong> {selectedUser.idCardNumber}
+              </p>
+              <p>
+                <strong>Address:</strong> {selectedUser.address}
+              </p>
+              <p>
+                <strong>Contact Number:</strong> {selectedUser.contactNumber}
+              </p>
+              <p>
+                <strong>Semester:</strong> {selectedUser.semester}
+              </p>
+              <p>
+                <strong>Year of Study:</strong> {selectedUser.yearOfStudy}
+              </p>
+              <p>
+                <strong>Role:</strong> {selectedUser.role}
+              </p>
+              <p>
+                <strong>Study Program:</strong>{' '}
+                {selectedUser.studyProgrammeId
+                  ? selectedUser.studyProgrammeId.name
+                  : ''}
+              </p>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={closeModal}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </>
   );
 };
