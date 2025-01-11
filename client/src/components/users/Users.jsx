@@ -2,6 +2,7 @@ import { useState } from 'react';
 import useGetUsers from '../../hooks/users/useGetUsers';
 import useCreateUser from '../../hooks/users/useCreateUser';
 import useEditUser from '../../hooks/users/useEditUser';
+import useDeleteUser from '../../hooks/users/useDeleteUser';
 import {
   Table,
   Pagination,
@@ -9,6 +10,7 @@ import {
   Label,
   Select,
   Button,
+  Modal,
 } from 'flowbite-react';
 import { HiSearch } from 'react-icons/hi';
 import UserDetailsModal from './UserDetailsModal';
@@ -55,8 +57,12 @@ const Users = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editUser, setEditUser] = useState(null);
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteUser, setDeleteUser] = useState(null);
+
   const { createUser } = useCreateUser();
   const { editUser: updateUser } = useEditUser();
+  const { deleteUser: removeUser } = useDeleteUser();
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -123,6 +129,16 @@ const Users = () => {
     setEditUser(null);
   };
 
+  const openDeleteModal = (user) => {
+    setDeleteUser(user);
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setDeleteUser(null);
+  };
+
   const handleCreateUserChange = (event) => {
     const { name, value } = event.target;
     setNewUser((prevUser) => ({
@@ -160,6 +176,12 @@ const Users = () => {
 
     await updateUser(editUser);
     closeEditModal();
+    refreshUsers();
+  };
+
+  const handleDeleteUserSubmit = async () => {
+    await removeUser(deleteUser._id);
+    closeDeleteModal();
     refreshUsers();
   };
 
@@ -321,6 +343,12 @@ const Users = () => {
                       >
                         Edit
                       </button>
+                      <button
+                        className="button"
+                        onClick={() => openDeleteModal(user)}
+                      >
+                        Delete
+                      </button>
                     </Table.Cell>
                   </Table.Row>
                 ))}
@@ -356,6 +384,19 @@ const Users = () => {
         onChange={handleEditUserChange}
         onSubmit={handleEditUserSubmit}
       />
+
+      <Modal show={isDeleteModalOpen} onClose={closeDeleteModal}>
+        <Modal.Header>Delete User</Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to delete this user?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color="failure" onClick={handleDeleteUserSubmit}>
+            Delete
+          </Button>
+          <Button onClick={closeDeleteModal}>Cancel</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
