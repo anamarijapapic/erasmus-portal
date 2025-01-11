@@ -4,32 +4,79 @@ const Department = require('../models/department.model');
 
 const getAllStudyProgrammes = async (req, res) => {
   try {
-    const { departmentId, subjectAreaId, academicEqfLevel } = req.query;
-    const filter = {};
-    if (departmentId) filter.departmentId = departmentId;
-    if (subjectAreaId) filter.subjectAreaId = subjectAreaId;
-    if (academicEqfLevel) filter.academicEqfLevel = academicEqfLevel;
+    // Fetch all
+    const allStudyProgrammes = await StudyProgramme.find().lean();
 
+    // Filter
+    let studyProgrammes = allStudyProgrammes.filter((studyProgramme) => {
+      const departmentId = req.query.department
+        ? studyProgramme.departmentId &&
+          studyProgramme.departmentId._id.toString() === req.query.department
+        : true;
+
+      const subjectAreaId = req.query.subjectArea
+        ? studyProgramme.subjectAreaId &&
+          studyProgramme.subjectAreaId._id.toString() === req.query.subjectArea
+        : true;
+
+      const academicEqfLevel = req.query.academicEqfLevel
+        ? studyProgramme.academicEqfLevel.toString() ===
+          req.query.academicEqfLevel
+        : true;
+
+      return departmentId && subjectAreaId && academicEqfLevel;
+    });
+
+    // Search
+    if (req.query.search) {
+      const search = req.query.search.toLowerCase();
+
+      studyProgrammes = studyProgrammes.filter((studyProgramme) =>
+        studyProgramme.name.toLowerCase().includes(search)
+      );
+    }
+
+    // Pagination
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const totalPages = Math.ceil(
-      (await StudyProgramme.countDocuments(filter).lean()) /
-        (parseInt(req.query.limit) || 10)
-    );
-    const skip = (page - 1) * limit;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const total = studyProgrammes.length;
+    const totalPages = Math.ceil(total / limit);
 
-    const studyProgammes = await StudyProgramme.find(filter)
-      .skip(skip)
-      .limit(limit)
-      .sort({
-        createdAt: -1,
-      })
-      .lean();
+    studyProgrammes = studyProgrammes.slice(startIndex, endIndex);
 
-    res.status(200).json({ studyProgammes, page, totalPages });
+    res.status(200).json({ studyProgrammes, page, totalPages });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
+  // try {
+  //   const { departmentId, subjectAreaId, academicEqfLevel } = req.query;
+  //   const filter = {};
+  //   if (departmentId) filter.departmentId = departmentId;
+  //   if (subjectAreaId) filter.subjectAreaId = subjectAreaId;
+  //   if (academicEqfLevel) filter.academicEqfLevel = academicEqfLevel;
+
+  //   const page = parseInt(req.query.page) || 1;
+  //   const limit = parseInt(req.query.limit) || 10;
+  //   const totalPages = Math.ceil(
+  //     (await StudyProgramme.countDocuments(filter).lean()) /
+  //       (parseInt(req.query.limit) || 10)
+  //   );
+  //   const skip = (page - 1) * limit;
+
+  //   const studyProgammes = await StudyProgramme.find(filter)
+  //     .skip(skip)
+  //     .limit(limit)
+  //     .sort({
+  //       createdAt: -1,
+  //     })
+  //     .lean();
+
+  //   res.status(200).json({ studyProgammes, page, totalPages });
+  // } catch (error) {
+  //   res.status(404).json({ message: error.message });
+  // }
 };
 
 const getStudyProgramme = async (req, res) => {

@@ -48,6 +48,13 @@ const CustomNavbar = () => {
               </Navbar.Link>
             )}
           </NavLink>
+          <NavLink to="/subjectAreas">
+            {({ isActive }) => (
+              <Navbar.Link as="div" active={isActive}>
+                Subject areas
+              </Navbar.Link>
+            )}
+          </NavLink>
         </Navbar.Collapse>
       )}
     </Navbar>
