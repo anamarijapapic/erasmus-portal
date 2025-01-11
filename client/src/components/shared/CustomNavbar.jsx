@@ -55,6 +55,13 @@ const CustomNavbar = () => {
               </Navbar.Link>
             )}
           </NavLink>
+          <NavLink to="/institutions">
+            {({ isActive }) => (
+              <Navbar.Link as="div" active={isActive}>
+                Institutions
+              </Navbar.Link>
+            )}
+          </NavLink>
         </Navbar.Collapse>
       )}
     </Navbar>
