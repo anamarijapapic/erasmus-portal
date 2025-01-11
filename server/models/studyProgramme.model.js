@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const studyProgrammeSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      required: true,
+    },
     departmentId: {
       type: mongoose.Types.ObjectId,
       ref: 'Department',
@@ -29,6 +33,17 @@ const studyProgrammeSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+studyProgrammeSchema.pre(['find', 'findOne'], function (next) {
+  this.populate({
+    path: 'departmentId',
+    populate: {
+      path: 'institutionId',
+    },
+  }).populate('subjectAreaId');
+
+  next();
+});
 
 const StudyProgramme = mongoose.model('StudyProgramme', studyProgrammeSchema);
 

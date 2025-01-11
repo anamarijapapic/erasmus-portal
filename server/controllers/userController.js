@@ -2,75 +2,86 @@ const {
   passwordValidation,
   userValidation,
 } = require('../validators/validation');
+const checkExistingModel = require('../utils/helpers.js');
+const { sendEmail } = require('../utils/mailer');
 const User = require('../models/user.model');
 const StudyProgramme = require('../models/studyProgramme.model');
 const Department = require('../models/department.model');
 const Institution = require('../models/institution.model');
 const generator = require('generate-password');
-const { sendEmail } = require('../utils/mailer');
 const bcrypt = require('bcrypt');
 
 const getUsers = async (req, res) => {
-  // Filters
-  const query = {};
-  if (req.query.role) {
-    query.role = req.query.role;
-  }
-
-  if (req.query.studyProgrammeId) {
-    query.studyProgrammeId = req.query.studyProgrammeId;
-  }
-  if (req.query.departmentId) {
-    query['studyProgrammeId.departmentId._id'] = req.query.departmentId;
-  }
-
-  if (req.query.institutionId) {
-    query['studyProgrammeId.departmentId.institutionId._id'] =
-      req.query.institutionId;
-  }
-  if (req.query.semester) {
-    query.semester = req.query.semester;
-  }
-
-  if (req.query.yearOfStudy) {
-    query.yearOfStudy = req.query.yearOfStudy;
-  }
-  console.log(req.query);
-  // Search
-  if (req.query.search) {
-    query.$or = [
-      { firstName: { $regex: req.query.search, $options: 'i' } },
-      { lastName: { $regex: req.query.search, $options: 'i' } },
-      { email: { $regex: req.query.search, $options: 'i' } },
-    ];
-  }
-
-  // Pagination
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
-  const totalPages = Math.ceil(
-    (await User.countDocuments(query).lean()) /
-      (parseInt(req.query.limit) || 10)
-  );
-  const skip = (page - 1) * limit;
-
   try {
-    const users = await User.find(query)
-      .populate({
-        path: 'studyProgrammeId', // Populate the studyProgrammeId
-        populate: {
-          path: 'departmentId', // Populate the departmentId within the studyProgramme
-          populate: {
-            path: 'institutionId', // Populate the institutionId within the department
-          },
-        },
-      })
-      .skip(skip)
-      .limit(limit)
-      .lean();
+    // Fetch all
+    const allUsers = await User.find().lean();
+
+    // Filter
+    let users = allUsers.filter((user) => {
+      const role = req.query.role ? user.role === req.query.role : true;
+
+      const semester = req.query.semester
+        ? user.semester.toString() === req.query.semester
+        : true;
+
+      const yearOfStudy = req.query.yearOfStudy
+        ? user.yearOfStudy.toString() === req.query.yearOfStudy
+        : true;
+
+      const studyProgrammeId = req.query.studyProgrammeId
+        ? user.studyProgrammeId &&
+          user.studyProgrammeId._id.toString() === req.query.studyProgrammeId
+        : true;
+
+      const departmentId = req.query.departmentId
+        ? user.studyProgrammeId &&
+          user.studyProgrammeId.departmentId &&
+          user.studyProgrammeId.departmentId._id.toString() ===
+            req.query.departmentId
+        : true;
+
+      const institutionId = req.query.institutionId
+        ? user.studyProgrammeId &&
+          user.studyProgrammeId.departmentId &&
+          user.studyProgrammeId.departmentId.institutionId &&
+          user.studyProgrammeId.departmentId.institutionId._id.toString() ===
+            req.query.institutionId
+        : true;
+
+      return (
+        role &&
+        studyProgrammeId &&
+        departmentId &&
+        institutionId &&
+        semester &&
+        yearOfStudy
+      );
+    });
+
+    // Search
+    if (req.query.search) {
+      const search = req.query.search.toLowerCase();
+
+      users = users.filter(
+        (user) =>
+          user.firstName.toLowerCase().includes(search) ||
+          user.lastName.toLowerCase().includes(search) ||
+          user.email.toLowerCase().includes(search)
+      );
+    }
+
+    // Pagination
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const total = users.length;
+    const totalPages = Math.ceil(total / limit);
+
+    users = users.slice(startIndex, endIndex);
+
     res.status(200).json({ users, page, totalPages });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -104,14 +115,12 @@ const createUser = async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const studyProgramme = await StudyProgramme.findById(
-      req.body.studyProgrammeId
-    ).lean();
-
-    if (!studyProgramme) {
-      return res.status(404).json({ message: 'No study programme present' });
+    if (req.body.studyProgrammeId) {
+      await checkExistingModel(StudyProgramme, req.body.studyProgrammeId);
     }
+
     const user = await User.create(req.body);
+
     res.status(201).json(user);
 
     // Send password to user's email
@@ -136,6 +145,10 @@ const updateUser = async (req, res) => {
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (req.body.studyProgrammeId) {
+      await checkExistingModel(StudyProgramme, req.body.studyProgrammeId);
     }
 
     res.status(200).json(user);

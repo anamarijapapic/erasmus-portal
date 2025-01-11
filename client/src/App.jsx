@@ -7,7 +7,7 @@ import Login from './components/auth/Login';
 import ForgotPassword from './components/auth/ForgotPassword';
 import ResetPassword from './components/auth/ResetPassword';
 import NotFound from './components/shared/NotFound';
-import Users from './components/users/Users';
+// import Users from './components/users/Users';
 
 function App() {
   // const { user } = useAuth();

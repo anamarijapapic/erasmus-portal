@@ -44,7 +44,7 @@ const getStudyProgramme = async (req, res) => {
 };
 
 const createStudyProgramme = async (req, res) => {
-  const { departmentId, subjectAreaId, academicEqfLevel } = req.body;
+  const { name, departmentId, subjectAreaId, academicEqfLevel } = req.body;
 
   try {
     const department = await Department.findById(departmentId).lean();
@@ -56,6 +56,7 @@ const createStudyProgramme = async (req, res) => {
       return res.status(404).json({ message: 'No department found' });
     }
     const studyProgramme = await StudyProgramme.create({
+      name,
       departmentId,
       subjectAreaId,
       academicEqfLevel,
@@ -85,7 +86,7 @@ const deleteStudyProgramme = async (req, res) => {
 
 const updateStudyProgramme = async (req, res) => {
   const { id } = req.params;
-  const { departmentId, subjectAreaId, academicEqfLevel } = req.body;
+  const { name, departmentId, subjectAreaId, academicEqfLevel } = req.body;
 
   try {
     const department = await Department.findById(departmentId).lean();
@@ -99,7 +100,7 @@ const updateStudyProgramme = async (req, res) => {
     }
     const updatedStudyProgramme = await StudyProgramme.findByIdAndUpdate(
       id,
-      { departmentId, subjectAreaId, academicEqfLevel },
+      { name, departmentId, subjectAreaId, academicEqfLevel },
       { new: true }
     );
 

@@ -15,14 +15,23 @@ const institutionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    contactPersonId: { type: mongoose.Types.ObjectId, ref: 'User' },
-    addressInfo: {
+    contactPersonId: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+    address: {
       type: String,
       required: true,
     },
   },
   { timestamps: true }
 );
+
+institutionSchema.pre(['find', 'findOne'], function (next) {
+  this.populate('contactPersonId');
+  next();
+});
 
 const Institution = mongoose.model('Institution', institutionSchema);
 
