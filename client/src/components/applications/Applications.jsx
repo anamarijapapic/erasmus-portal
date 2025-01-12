@@ -12,10 +12,10 @@ import {
   Button,
   Modal,
 } from 'flowbite-react';
-import { HiDownload } from 'react-icons/hi';
 import ApplicationDetailsModal from './ApplicationDetailsModal';
 import CreateApplicationModal from './CreateApplicationModal';
 import EditApplicationModal from './EditApplicationModal';
+import FilesModal from './FilesModal';
 
 const Applications = () => {
   const [statusFilter, setStatusFilter] = useState('');
@@ -154,6 +154,15 @@ const Applications = () => {
     refreshApplications();
   };
 
+  const refreshFiles = async (applicationId) => {
+    const response = await fetch(
+      `http://localhost:3000/applications/${applicationId}`
+    );
+    const data = await response.json();
+    setSelectedApplication(data);
+    refreshApplications();
+  };
+
   const handleReset = (event) => {
     setStatusFilter('');
     setRoleFilter('');
@@ -237,15 +246,7 @@ const Applications = () => {
                 <Table.HeadCell>Status</Table.HeadCell>
                 <Table.HeadCell>Rating</Table.HeadCell>
                 <Table.HeadCell>
-                  <button
-                    className="button"
-                    onClick={() => openModal(application)}
-                  >
-                    Details
-                  </button>
-                </Table.HeadCell>
-                <Table.HeadCell>
-                  <span className="sr-only">Edit</span>
+                  <span className="sr-only">Actions</span>
                 </Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
@@ -339,29 +340,12 @@ const Applications = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={isFilesModalOpen} onClose={closeFilesModal}>
-        <Modal.Header>Attached Files</Modal.Header>
-        <Modal.Body>
-          <ul>
-            {selectedApplication &&
-              selectedApplication.files.map((file) => (
-                <li key={file._id}>
-                  <a
-                    href={`http://localhost:3000/applications/downloadFile/${file._id}`}
-                    target="_blank"
-                    className="flex items-center"
-                  >
-                    <HiDownload className="mr-2" />
-                    {file.filename}
-                  </a>
-                </li>
-              ))}
-          </ul>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={closeFilesModal}>Close</Button>
-        </Modal.Footer>
-      </Modal>
+      <FilesModal
+        isOpen={isFilesModalOpen}
+        onClose={closeFilesModal}
+        application={selectedApplication}
+        refreshFiles={refreshFiles}
+      />
     </>
   );
 };
