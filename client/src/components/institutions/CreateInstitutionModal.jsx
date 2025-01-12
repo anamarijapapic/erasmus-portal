@@ -4,6 +4,7 @@ const CreateInstitutionModal = ({
   isOpen,
   onClose,
   institution,
+  users,
   onChange,
   onSubmit,
 }) => {
@@ -43,14 +44,23 @@ const CreateInstitutionModal = ({
             />
           </div>
           <div>
-            <Label htmlFor="contactPersonId" value="Contact person" />
-            <TextInput
+            <Label htmlFor="contactPersonId" value="Contact Person" />
+            <Select
               id="contactPersonId"
               name="contactPersonId"
               value={institution.contactPersonId}
               onChange={onChange}
               required
-            />
+            >
+              <option value="">Select a Contact person</option>
+              {users
+                .filter((user) => user.role === 'coordinator')
+                .map((user) => (
+                  <option key={user._id} value={user._id}>
+                    {user.firstName} {user.lastName}
+                  </option>
+                ))}
+            </Select>
           </div>
           <div>
             <Label htmlFor="address" value="Address" />

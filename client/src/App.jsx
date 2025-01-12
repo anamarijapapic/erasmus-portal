@@ -7,8 +7,10 @@ import Login from './components/auth/Login';
 import ForgotPassword from './components/auth/ForgotPassword';
 import ResetPassword from './components/auth/ResetPassword';
 import NotFound from './components/shared/NotFound';
+import Users from './components/users/Users';
+import SubjectAreas from './components/subjectAreas/SubjectAreas';
+import StudyProgrammes from './components/studyProgrammes/studyProgrammes';
 import Departments from './components/departments/departments';
-// import Users from './components/users/Users';
 import Institutitons from './components/institutions/Institutions';
 import Applications from './components/applications/Applications';
 
@@ -28,11 +30,19 @@ function App() {
           path="/auth/reset-password/:userId/:token"
           element={<ResetPassword />}
         />
+
+        {/*Subject area page */}
+        <Route path="/subjectAreas" element={<SubjectAreas />} />
+        {/*Study programme page */}
+        <Route path="/studyProgrammes" element={<StudyProgrammes />} />
         {/*Institution page */}
         <Route path="/institutions" element={<Institutitons />} />
         {/*Applications page */}
         <Route path="/applications" element={<Applications />} />
         <Route path="/departments" element={<Departments />} />
+
+        {/* User page */}
+        <Route path="/users" element={<Users />} />
 
         {/* 404 page */}
         <Route path="*" element={<NotFound />} />
