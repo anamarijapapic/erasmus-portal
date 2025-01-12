@@ -62,8 +62,6 @@ const checkHostAndHomeInstitutionConflict = async (
       },
     })
     .lean();
-  console.log(hostStudyProgramme.departmentId.institutionId._id.toString());
-  console.log(homeInstitutionId.toString());
   if (
     hostStudyProgramme.departmentId.institutionId._id.toString() ===
     homeInstitutionId.toString()

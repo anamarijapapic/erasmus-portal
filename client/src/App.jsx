@@ -12,6 +12,7 @@ import StudyProgrammes from './components/studyProgrammes/studyProgrammes';
 import Departments from './components/departments/departments';
 // import Users from './components/users/Users';
 import Institutitons from './components/institutions/Institutions';
+import Mobilities from './components/mobilities/Mobilities';
 
 function App() {
   // const { user } = useAuth();
@@ -36,7 +37,9 @@ function App() {
         <Route path="/studyProgrammes" element={<StudyProgrammes />} />
         {/*Institution page */}
         <Route path="/institutions" element={<Institutitons />} />
-
+        {/*Mobilities page */}
+        <Route path="/mobilities" element={<Mobilities />} />
+        {/*Departments page */}
         <Route path="/departments" element={<Departments />} />
 
         {/* 404 page */}
