@@ -2,7 +2,7 @@ import { Modal, Button } from 'flowbite-react';
 
 const StudyProgrammeDetailsModal = ({ isOpen, onClose, studyProgramme }) => {
   if (!studyProgramme) return null;
-
+  console.log(studyProgramme.departmentId);
   return (
     <Modal show={isOpen} onClose={onClose}>
       <Modal.Header>StudyProgramme Details</Modal.Header>
@@ -13,6 +13,12 @@ const StudyProgrammeDetailsModal = ({ isOpen, onClose, studyProgramme }) => {
           </p>
           <p>
             <strong>Department:</strong> {studyProgramme.departmentId.name}
+          </p>
+          <p>
+            <strong>Address:</strong> {studyProgramme.departmentId.address}
+          </p>
+          <p>
+            <strong>Institution:</strong> {studyProgramme.departmentId.institutionId.name}
           </p>
           <p>
             <strong>Subject area:</strong> {studyProgramme.subjectAreaId.name}

@@ -1,7 +1,6 @@
 import { Modal, Button, Label, TextInput, Select } from 'flowbite-react';
-import useGetSubjectAreas from '../../hooks/subjectAreas/useGetSubjectAreas';
-const CreateStudyProgrammeModal = ({ isOpen, onClose, studyProgramme, onChange, onSubmit }) => {
-  const { subjectAreas } = useGetSubjectAreas('', 10);
+
+const CreateStudyProgrammeModal = ({ isOpen, onClose, departments, subjectAreas, studyProgramme, onChange, onSubmit }) => {
   return (
     <Modal show={isOpen} onClose={onClose}>
       <Modal.Header>Create study programme</Modal.Header>
@@ -19,12 +18,20 @@ const CreateStudyProgrammeModal = ({ isOpen, onClose, studyProgramme, onChange, 
           </div>
           <div>
             <Label htmlFor="departmentId" value="Department" />
-            <TextInput
+            <Select
               id="departmentId"
               name="departmentId"
               value={studyProgramme.departmentId}
               onChange={onChange}
-            />
+              required
+            >
+              <option value="">Select a department</option>
+              {departments.map((department) => (
+                <option key={department._id} value={department._id}>
+                  {department.name}
+                </option>
+              ))}
+            </Select>
           </div>
           <div>
             <Label htmlFor="subjectAreaId" value="Subject Area" />

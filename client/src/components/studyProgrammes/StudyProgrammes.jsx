@@ -17,6 +17,7 @@ import { HiSearch } from 'react-icons/hi';
 import StudyProgrammeDetailsModal from './StudyProgrammeDetailsModal';
 import CreateStudyProgrammeModal from './CreateStudyProgrammeModal';
 import EditStudyProgrammeModal from './EditStudyProgrammeModal';
+import useGetDepartments from '../../hooks/departments/useGetDepartments';
 
 const StudyProgrammes = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,7 +25,7 @@ const StudyProgrammes = () => {
   const [academicEqfLevelFilter, setAcademicEqfLevelFilter] = useState('');
   const [subjectAreaFilter, setSubjectAreaFilter] = useState('');
   const [limit, setLimit] = useState(10);
-  const { subjectAreas } = useGetSubjectAreas('', 100);
+
   const { studyProgrammes, currentPage, totalPages, onPageChange, refreshStudyProgrammes } =
     useGetStudyProgrammes(
       searchQuery,
@@ -34,6 +35,8 @@ const StudyProgrammes = () => {
       limit
     );
 
+  const { subjectAreas } = useGetSubjectAreas('', null);
+  const { departments } = useGetDepartments('', '', null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStudyProgramme, setSelectedStudyProgramme] = useState(null);
 
@@ -144,14 +147,9 @@ const StudyProgrammes = () => {
     closeCreateModal();
     refreshStudyProgrammes();
   };
-
+  
   const handleEditStudyProgrammeSubmit = async (event) => {
     event.preventDefault();
-
-    if (editStudyProgramme.studyProgrammeId === '') {
-      delete editStudyProgramme.studyProgrammeId;
-    }
-
     await updateStudyProgramme(editStudyProgramme);
     closeEditModal();
     refreshStudyProgrammes();
@@ -204,7 +202,27 @@ const StudyProgrammes = () => {
             <div className="max-w-md">
               <div className="mb-2 block">
                 <Label
-                  htmlFor="subjectArea-filter"
+                  htmlFor="department-filter"
+                  value="Select departments"
+                />
+              </div>
+              <Select
+                id="department-filter"
+                value={departmentFilter}
+                onChange={handleDepartmentChange}
+              >
+               <option value="">All departments</option>
+                {departments.map((department) => (
+                <option key={department._id} value={department._id}>
+                    {department.name}
+                </option>
+                ))}
+              </Select>
+            </div>
+            <div className="max-w-md">
+              <div className="mb-2 block">
+                <Label
+                  htmlFor="department-filter"
                   value="Select subject area"
                 />
               </div>
@@ -306,6 +324,8 @@ const StudyProgrammes = () => {
       <CreateStudyProgrammeModal
         isOpen={isCreateModalOpen}
         onClose={closeCreateModal}
+        departments={departments}
+        subjectAreas={subjectAreas}
         studyProgramme={newStudyProgramme}
         onChange={handleCreateStudyProgrammeChange}
         onSubmit={handleCreateStudyProgrammeSubmit}
@@ -314,6 +334,8 @@ const StudyProgrammes = () => {
       <EditStudyProgrammeModal
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
+        departments={departments}
+        subjectAreas={subjectAreas}
         studyProgramme={editStudyProgramme}
         onChange={handleEditStudyProgrammeChange}
         onSubmit={handleEditStudyProgrammeSubmit}

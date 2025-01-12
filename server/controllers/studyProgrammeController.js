@@ -50,33 +50,6 @@ const getAllStudyProgrammes = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-  // try {
-  //   const { departmentId, subjectAreaId, academicEqfLevel } = req.query;
-  //   const filter = {};
-  //   if (departmentId) filter.departmentId = departmentId;
-  //   if (subjectAreaId) filter.subjectAreaId = subjectAreaId;
-  //   if (academicEqfLevel) filter.academicEqfLevel = academicEqfLevel;
-
-  //   const page = parseInt(req.query.page) || 1;
-  //   const limit = parseInt(req.query.limit) || 10;
-  //   const totalPages = Math.ceil(
-  //     (await StudyProgramme.countDocuments(filter).lean()) /
-  //       (parseInt(req.query.limit) || 10)
-  //   );
-  //   const skip = (page - 1) * limit;
-
-  //   const studyProgammes = await StudyProgramme.find(filter)
-  //     .skip(skip)
-  //     .limit(limit)
-  //     .sort({
-  //       createdAt: -1,
-  //     })
-  //     .lean();
-
-  //   res.status(200).json({ studyProgammes, page, totalPages });
-  // } catch (error) {
-  //   res.status(404).json({ message: error.message });
-  // }
 };
 
 const getStudyProgramme = async (req, res) => {

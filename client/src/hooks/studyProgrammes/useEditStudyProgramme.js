@@ -5,6 +5,12 @@ const useEditStudyProgramme = () => {
 
   const editStudyProgramme = async (studyProgramme) => {
     try {
+      if (studyProgramme.departmentId._id) {
+        studyProgramme.departmentId = studyProgramme.departmentId._id;
+      }
+      if (studyProgramme.subjectAreaId._id) {
+        studyProgramme.subjectAreaId = studyProgramme.subjectAreaId._id;
+      }
       const response = await fetch(
         `http://localhost:3000/studyProgrammes/${studyProgramme._id}`,
         {
@@ -15,7 +21,6 @@ const useEditStudyProgramme = () => {
           body: JSON.stringify(studyProgramme),
         }
       );
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message);

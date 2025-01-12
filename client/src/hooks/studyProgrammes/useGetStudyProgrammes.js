@@ -14,7 +14,7 @@ const useGetStudyProgrammes = (
   const fetchStudyProgrammes = useCallback(async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/studyProgrammes?page=${currentPage}&limit=${limit}&search=${searchQuery}&department=${departmentFilter}&subjectArea=${subjectAreaFilter}&academicEqfLevel=${academicEqfLevelFilter}`
+        `http://localhost:3000/studyProgrammes?page=${currentPage}&limit=${limit}&search=${searchQuery}&subjectArea=${subjectAreaFilter}&department=${departmentFilter}&academicEqfLevel=${academicEqfLevelFilter}`
       );
       const data = await response.json();
       setStudyProgrammes(data.studyProgrammes);

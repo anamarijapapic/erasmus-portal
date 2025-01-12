@@ -7,12 +7,9 @@ import Login from './components/auth/Login';
 import ForgotPassword from './components/auth/ForgotPassword';
 import ResetPassword from './components/auth/ResetPassword';
 import NotFound from './components/shared/NotFound';
-<<<<<<< HEAD
 import SubjectAreas from './components/subjectAreas/SubjectAreas';
 import StudyProgrammes from './components/studyProgrammes/studyProgrammes';
-=======
 import Departments from './components/departments/departments';
->>>>>>> c91d2f3d12f6b7a288c849b2e0df9e12366bd448
 // import Users from './components/users/Users';
 import Institutitons from './components/institutions/Institutions';
 
@@ -33,7 +30,9 @@ function App() {
           element={<ResetPassword />}
         />
         
+        {/*Subject area page */}
         <Route path="/subjectAreas" element={<SubjectAreas />} />
+        {/*Study programme page */}
         <Route path="/studyProgrammes" element={<StudyProgrammes />} />
         {/*Institution page */}
         <Route path="/institutions" element={<Institutitons />} />
