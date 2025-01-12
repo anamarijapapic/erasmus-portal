@@ -62,6 +62,13 @@ const CustomNavbar = () => {
               </Navbar.Link>
             )}
           </NavLink>
+          <NavLink to="/applications">
+            {({ isActive }) => (
+              <Navbar.Link as="div" active={isActive}>
+                Applications
+              </Navbar.Link>
+            )}
+          </NavLink>
         </Navbar.Collapse>
       )}
     </Navbar>

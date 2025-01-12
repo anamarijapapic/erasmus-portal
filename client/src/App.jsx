@@ -10,6 +10,7 @@ import NotFound from './components/shared/NotFound';
 import Departments from './components/departments/departments';
 // import Users from './components/users/Users';
 import Institutitons from './components/institutions/Institutions';
+import Applications from './components/applications/Applications';
 
 function App() {
   // const { user } = useAuth();
@@ -29,7 +30,8 @@ function App() {
         />
         {/*Institution page */}
         <Route path="/institutions" element={<Institutitons />} />
-
+        {/*Applications page */}
+        <Route path="/applications" element={<Applications />} />
         <Route path="/departments" element={<Departments />} />
 
         {/* 404 page */}

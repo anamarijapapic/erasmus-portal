@@ -182,8 +182,16 @@ const Institutions = () => {
                 value={countryFilter}
                 onChange={handleCountryChange}
               >
-                <option value="Croatia">Hrvatska</option>
-                <option value="Bosna">Bosna</option>
+                <option value="">All Countries</option>
+                {[
+                  ...new Set(
+                    institutions.map((institution) => institution.country)
+                  ),
+                ].map((country) => (
+                  <option key={country} value={country}>
+                    {country}
+                  </option>
+                ))}
               </Select>
             </div>
             <div className="max-w-md">
