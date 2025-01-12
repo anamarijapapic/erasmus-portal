@@ -1,0 +1,38 @@
+@hostname = localhost
+@port = {{$dotenv PORT}}
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+###
+
+# @name getApplications
+GET http://{{host}}/applications HTTP/1.1
+
+###
+# @prompt applicationId Id of the application
+
+# @name getApplication
+GET http://{{host}}/applications/{{applicationId}} HTTP/1.1
+
+###
+
+# @name createApplication
+POST http://{{host}}/applications HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "name": "Application 1",
+  "description": "Description of application 1"
+}
+
+###
+# @prompt fileId Id of the file attached to the application
+
+# @name downloadFile
+GET http://{{host}}/applications/downloadFile/{{fileId}} HTTP/1.1
+
+###
+# @prompt fileId Id of the file attached to the application
+
+# @name deleteFile
+DELETE http://{{host}}/applications/deleteFile/{{fileId}} HTTP/1.1
