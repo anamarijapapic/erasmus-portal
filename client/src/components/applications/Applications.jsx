@@ -12,6 +12,7 @@ import {
   Button,
   Modal,
 } from 'flowbite-react';
+import { HiDownload } from 'react-icons/hi';
 import ApplicationDetailsModal from './ApplicationDetailsModal';
 // import CreateInstitutionModal from './CreateInstitutionModal';
 // import EditInstitutionModal from './EditInstitutionModal';
@@ -22,6 +23,7 @@ const Applications = () => {
   const [limit, setLimit] = useState(10);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFilesModalOpen, setIsFilesModalOpen] = useState(false);
   const [selectedApplication, setSelectedApplication] = useState(null);
 
   //   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -71,6 +73,16 @@ const Applications = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setSelectedApplication(null);
+  };
+
+  const openFilesModal = (application) => {
+    setSelectedApplication(application);
+    setIsFilesModalOpen(true);
+  };
+
+  const closeFilesModal = () => {
+    setIsFilesModalOpen(false);
     setSelectedApplication(null);
   };
 
@@ -260,6 +272,12 @@ const Applications = () => {
                       >
                         Details
                       </button>
+                      <button
+                        className="button"
+                        onClick={() => openFilesModal(application)}
+                      >
+                        Attached Files
+                      </button>
                       {/* <button
                         className="button"
                         onClick={() => openEditModal(institution)}
@@ -321,6 +339,30 @@ const Applications = () => {
           <Button onClick={closeDeleteModal}>Cancel</Button>
         </Modal.Footer>
       </Modal> */}
+
+      <Modal show={isFilesModalOpen} onClose={closeFilesModal}>
+        <Modal.Header>Attached Files</Modal.Header>
+        <Modal.Body>
+          <ul>
+            {selectedApplication &&
+              selectedApplication.files.map((file) => (
+                <li key={file._id}>
+                  <a
+                    href={`http://localhost:3000/applications/downloadFile/${file._id}`}
+                    target="_blank"
+                    className="flex items-center"
+                  >
+                    <HiDownload className="mr-2" />
+                    {file.filename}
+                  </a>
+                </li>
+              ))}
+          </ul>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={closeFilesModal}>Close</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
