@@ -87,6 +87,13 @@ const CustomNavbar = () => {
               </Navbar.Link>
             )}
           </NavLink>
+          <NavLink to="/applications">
+            {({ isActive }) => (
+              <Navbar.Link as="div" active={isActive}>
+                Applications
+              </Navbar.Link>
+            )}
+          </NavLink>
           <NavLink to="/mobilities">
             {({ isActive }) => (
               <Navbar.Link as="div" active={isActive}>

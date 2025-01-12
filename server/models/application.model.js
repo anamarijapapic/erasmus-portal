@@ -24,6 +24,26 @@ const applicationSchema = new Schema(
   { timestamps: true }
 );
 
+applicationSchema.pre(['find', 'findOne'], function (next) {
+  this.populate({
+    path: 'mobilityId',
+    populate: {
+      path: 'hostStudyProgrammeId',
+      populate: {
+        path: 'subjectAreaId',
+        path: 'departmentId',
+        populate: {
+          path: 'institutionId',
+        },
+      },
+    },
+  }).populate({
+    path: 'userId',
+  });
+
+  next();
+});
+
 const Application = mongoose.model('Application', applicationSchema);
 
 module.exports = Application;

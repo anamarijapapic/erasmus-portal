@@ -83,7 +83,7 @@ const getApplication = async (req, res) => {
     const files = await getFilesByApplicationId(application._id);
 
     res.status(200).json({
-      application,
+      ...application,
       files,
     });
   } catch (error) {
