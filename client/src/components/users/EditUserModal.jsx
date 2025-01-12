@@ -1,6 +1,13 @@
 import { Modal, Button, Label, TextInput, Select } from 'flowbite-react';
 
-const EditUserModal = ({ isOpen, onClose, user, onChange, onSubmit }) => {
+const EditUserModal = ({
+  isOpen,
+  onClose,
+  user,
+  onChange,
+  onSubmit,
+  studyProgrammes,
+}) => {
   if (!user) return null;
 
   return (
@@ -162,12 +169,19 @@ const EditUserModal = ({ isOpen, onClose, user, onChange, onSubmit }) => {
           </div>
           <div>
             <Label htmlFor="studyProgrammeId" value="Study Programme" />
-            <TextInput
+            <Select
               id="studyProgrammeId"
               name="studyProgrammeId"
               value={user.studyProgrammeId}
               onChange={onChange}
-            />
+            >
+              <option value="">Select Study Programme</option>
+              {studyProgrammes.map((studyProgramme) => (
+                <option key={studyProgramme._id} value={studyProgramme._id}>
+                  {studyProgramme.name}
+                </option>
+              ))}
+            </Select>
           </div>
           <Button type="submit">Save</Button>
         </form>

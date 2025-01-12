@@ -3,6 +3,7 @@ import useGetUsers from '../../hooks/users/useGetUsers';
 import useCreateUser from '../../hooks/users/useCreateUser';
 import useEditUser from '../../hooks/users/useEditUser';
 import useDeleteUser from '../../hooks/users/useDeleteUser';
+import useGetStudyProgrammes from '../../hooks/studyProgrammes/useGetStudyProgrammes';
 import {
   Table,
   Pagination,
@@ -63,6 +64,8 @@ const Users = () => {
   const { createUser } = useCreateUser();
   const { editUser: updateUser } = useEditUser();
   const { deleteUser: removeUser } = useDeleteUser();
+
+  const { studyProgrammes } = useGetStudyProgrammes('', '', '', '', null);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -375,6 +378,7 @@ const Users = () => {
         user={newUser}
         onChange={handleCreateUserChange}
         onSubmit={handleCreateUserSubmit}
+        studyProgrammes={studyProgrammes}
       />
 
       <EditUserModal
@@ -383,6 +387,7 @@ const Users = () => {
         user={editUser}
         onChange={handleEditUserChange}
         onSubmit={handleEditUserSubmit}
+        studyProgrammes={studyProgrammes}
       />
 
       <Modal show={isDeleteModalOpen} onClose={closeDeleteModal}>
