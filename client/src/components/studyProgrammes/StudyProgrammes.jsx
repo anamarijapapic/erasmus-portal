@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import useGetStudyProgrammes from '../../hooks/studyProgrammes/useGetStudyProgrammes';
 import useCreateStudyProgramme from '../../hooks/studyProgrammes/useCreateStudyProgramme';
 import useEditStudyProgramme from '../../hooks/studyProgrammes/useEditStudyProgramme';
@@ -14,26 +15,35 @@ import {
   Modal,
 } from 'flowbite-react';
 import { HiSearch } from 'react-icons/hi';
+import { GoInfo } from 'react-icons/go';
+import { TbEdit } from 'react-icons/tb';
+import { MdOutlineDelete } from 'react-icons/md';
 import StudyProgrammeDetailsModal from './StudyProgrammeDetailsModal';
 import CreateStudyProgrammeModal from './CreateStudyProgrammeModal';
 import EditStudyProgrammeModal from './EditStudyProgrammeModal';
 import useGetDepartments from '../../hooks/departments/useGetDepartments';
 
 const StudyProgrammes = () => {
+  const { user: loggedInUser } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('');
   const [academicEqfLevelFilter, setAcademicEqfLevelFilter] = useState('');
   const [subjectAreaFilter, setSubjectAreaFilter] = useState('');
   const [limit, setLimit] = useState(10);
 
-  const { studyProgrammes, currentPage, totalPages, onPageChange, refreshStudyProgrammes } =
-    useGetStudyProgrammes(
-      searchQuery,
-      departmentFilter,
-      subjectAreaFilter,
-      academicEqfLevelFilter,
-      limit
-    );
+  const {
+    studyProgrammes,
+    currentPage,
+    totalPages,
+    onPageChange,
+    refreshStudyProgrammes,
+  } = useGetStudyProgrammes(
+    searchQuery,
+    departmentFilter,
+    subjectAreaFilter,
+    academicEqfLevelFilter,
+    limit
+  );
 
   const { subjectAreas } = useGetSubjectAreas('', null);
   const { departments } = useGetDepartments('', '', null);
@@ -44,7 +54,7 @@ const StudyProgrammes = () => {
   const [newStudyProgramme, setNewStudyProgramme] = useState({
     subjectAreaId: '',
     departmentId: '',
-    academicEqfLevel: ''
+    academicEqfLevel: '',
   });
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -55,7 +65,8 @@ const StudyProgrammes = () => {
 
   const { createStudyProgramme } = useCreateStudyProgramme();
   const { editStudyProgramme: updateStudyProgramme } = useEditStudyProgramme();
-  const { deleteStudyProgramme: removeStudyProgramme } = useDeleteStudyProgramme();
+  const { deleteStudyProgramme: removeStudyProgramme } =
+    useDeleteStudyProgramme();
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -94,9 +105,9 @@ const StudyProgrammes = () => {
   const closeCreateModal = () => {
     setIsCreateModalOpen(false);
     setNewStudyProgramme({
-        subjectAreaId: '',
-        departmentId: '',
-        academicEqfLevel: ''
+      subjectAreaId: '',
+      departmentId: '',
+      academicEqfLevel: '',
     });
   };
 
@@ -147,7 +158,7 @@ const StudyProgrammes = () => {
     closeCreateModal();
     refreshStudyProgrammes();
   };
-  
+
   const handleEditStudyProgrammeSubmit = async (event) => {
     event.preventDefault();
     await updateStudyProgramme(editStudyProgramme);
@@ -181,7 +192,10 @@ const StudyProgrammes = () => {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
             <div className="max-w-md">
               <div className="mb-2 block">
-                <Label htmlFor="academicEqfLevel-filter" value="Select a academicEqfLevel" />
+                <Label
+                  htmlFor="academicEqfLevel-filter"
+                  value="Select a academicEqfLevel"
+                />
               </div>
               <Select
                 id="academicEqfLevel-filter"
@@ -201,21 +215,18 @@ const StudyProgrammes = () => {
             </div>
             <div className="max-w-md">
               <div className="mb-2 block">
-                <Label
-                  htmlFor="department-filter"
-                  value="Select departments"
-                />
+                <Label htmlFor="department-filter" value="Select departments" />
               </div>
               <Select
                 id="department-filter"
                 value={departmentFilter}
                 onChange={handleDepartmentChange}
               >
-               <option value="">All departments</option>
+                <option value="">All departments</option>
                 {departments.map((department) => (
-                <option key={department._id} value={department._id}>
+                  <option key={department._id} value={department._id}>
                     {department.name}
-                </option>
+                  </option>
                 ))}
               </Select>
             </div>
@@ -231,11 +242,11 @@ const StudyProgrammes = () => {
                 value={subjectAreaFilter}
                 onChange={handleSubjectAreaChange}
               >
-               <option value="">All Subject Areas</option>
+                <option value="">All Subject Areas</option>
                 {subjectAreas.map((subjectArea) => (
-                <option key={subjectArea._id} value={subjectArea._id}>
+                  <option key={subjectArea._id} value={subjectArea._id}>
                     {subjectArea.name}
-                </option>
+                  </option>
                 ))}
               </Select>
             </div>
@@ -255,9 +266,11 @@ const StudyProgrammes = () => {
               </Select>
             </div>
           </div>
-          <div className="flex justify-end">
-            <Button onClick={openCreateModal}>Create StudyProgramme</Button>
-          </div>
+          {['admin', 'coordinator'].includes(loggedInUser?.role) && (
+            <div className="flex justify-end">
+              <Button onClick={openCreateModal}>Create Study Programme</Button>
+            </div>
+          )}
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <Table hoverable>
               <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800">
@@ -272,7 +285,7 @@ const StudyProgrammes = () => {
                 <Table.HeadCell>Department</Table.HeadCell>
                 <Table.HeadCell>Subject area</Table.HeadCell>
                 <Table.HeadCell>
-                  <span className="sr-only">Edit</span>
+                  <span className="sr-only">Actions</span>
                 </Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
@@ -284,23 +297,38 @@ const StudyProgrammes = () => {
                     <Table.Cell>{studyProgramme.subjectAreaId.name}</Table.Cell>
                     <Table.Cell>
                       <button
-                        className="button"
+                        className="button mr-2"
                         onClick={() => openModal(studyProgramme)}
                       >
-                        Details
+                        <GoInfo
+                          className="text-blue-400"
+                          style={{ fontSize: '1.5rem' }}
+                        />
                       </button>
-                      <button
-                        className="button"
-                        onClick={() => openEditModal(studyProgramme)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="button"
-                        onClick={() => openDeleteModal(studyProgramme)}
-                      >
-                        Delete
-                      </button>
+                      {['admin', 'coordinator'].includes(
+                        loggedInUser?.role
+                      ) && (
+                        <>
+                          <button
+                            className="button mr-2"
+                            onClick={() => openEditModal(studyProgramme)}
+                          >
+                            <TbEdit
+                              className="text-green-400"
+                              style={{ fontSize: '1.5rem' }}
+                            />
+                          </button>
+                          <button
+                            className="button mr-2"
+                            onClick={() => openDeleteModal(studyProgramme)}
+                          >
+                            <MdOutlineDelete
+                              className="text-red-400"
+                              style={{ fontSize: '1.5rem' }}
+                            />
+                          </button>
+                        </>
+                      )}
                     </Table.Cell>
                   </Table.Row>
                 ))}

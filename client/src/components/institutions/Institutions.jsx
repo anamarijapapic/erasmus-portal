@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import useGetInstitutions from '../../hooks/institutions/useGetInstitutions';
 import useCreateInstitution from '../../hooks/institutions/useCreateInstitution';
 import useEditInstitution from '../../hooks/institutions/useEditInstitution';
@@ -13,12 +14,16 @@ import {
   Modal,
 } from 'flowbite-react';
 import { HiSearch } from 'react-icons/hi';
+import { GoInfo } from 'react-icons/go';
+import { TbEdit } from 'react-icons/tb';
+import { MdOutlineDelete } from 'react-icons/md';
 import InstitutionDetailsModal from './InstitutionDetailsModal';
 import CreateInstitutionModal from './CreateInstitutionModal';
 import EditInstitutionModal from './EditInstitutionModal';
 import useGetUsers from '../../hooks/users/useGetUsers';
 
 const Institutions = () => {
+  const { user: loggedInUser } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [countryFilter, setCountryFilter] = useState('');
   const [limit, setLimit] = useState(10);
@@ -185,8 +190,16 @@ const Institutions = () => {
                 value={countryFilter}
                 onChange={handleCountryChange}
               >
-                <option value="Croatia">Hrvatska</option>
-                <option value="Bosna">Bosna</option>
+                <option value="">All Countries</option>
+                {[
+                  ...new Set(
+                    institutions.map((institution) => institution.country)
+                  ),
+                ].map((country) => (
+                  <option key={country} value={country}>
+                    {country}
+                  </option>
+                ))}
               </Select>
             </div>
             <div className="max-w-md">
@@ -209,9 +222,11 @@ const Institutions = () => {
             <Button className="m-1" onClick={handleReset}>
               Clear
             </Button>
-            <Button className="m-1" onClick={openCreateModal}>
-              Create Institutions
-            </Button>
+            {loggedInUser?.role === 'admin' && (
+              <Button className="m-1" onClick={openCreateModal}>
+                Create Institutions
+              </Button>
+            )}
           </div>
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <Table hoverable>
@@ -230,10 +245,7 @@ const Institutions = () => {
                 <Table.HeadCell>Contact number</Table.HeadCell>
                 <Table.HeadCell>address</Table.HeadCell>
                 <Table.HeadCell>
-                  <span className="sr-only">Details</span>
-                </Table.HeadCell>
-                <Table.HeadCell>
-                  <span className="sr-only">Edit</span>
+                  <span className="sr-only">Actions</span>
                 </Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
@@ -257,23 +269,36 @@ const Institutions = () => {
                     <Table.Cell>{institution.address}</Table.Cell>
                     <Table.Cell>
                       <button
-                        className="button"
+                        className="button mr-2"
                         onClick={() => openModal(institution)}
                       >
-                        Details
+                        <GoInfo
+                          className="text-blue-400"
+                          style={{ fontSize: '1.5rem' }}
+                        />
                       </button>
-                      <button
-                        className="button"
-                        onClick={() => openEditModal(institution)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="button"
-                        onClick={() => openDeleteModal(institution)}
-                      >
-                        Delete
-                      </button>
+                      {loggedInUser?.role === 'admin' && (
+                        <>
+                          <button
+                            className="button mr-2"
+                            onClick={() => openEditModal(institution)}
+                          >
+                            <TbEdit
+                              className="text-green-400"
+                              style={{ fontSize: '1.5rem' }}
+                            />
+                          </button>
+                          <button
+                            className="button mr-2"
+                            onClick={() => openDeleteModal(institution)}
+                          >
+                            <MdOutlineDelete
+                              className="text-red-400"
+                              style={{ fontSize: '1.5rem' }}
+                            />
+                          </button>
+                        </>
+                      )}
                     </Table.Cell>
                   </Table.Row>
                 ))}

@@ -12,6 +12,7 @@ import SubjectAreas from './components/subjectAreas/SubjectAreas';
 import StudyProgrammes from './components/studyProgrammes/studyProgrammes';
 import Departments from './components/departments/departments';
 import Institutitons from './components/institutions/Institutions';
+import Applications from './components/applications/Applications';
 import Mobilities from './components/mobilities/Mobilities';
 
 function App() {
@@ -37,6 +38,8 @@ function App() {
         <Route path="/studyProgrammes" element={<StudyProgrammes />} />
         {/*Institution page */}
         <Route path="/institutions" element={<Institutitons />} />
+        {/*Applications page */}
+        <Route path="/applications" element={<Applications />} />
         {/*Mobilities page */}
         <Route path="/mobilities" element={<Mobilities />} />
         {/*Departments page */}

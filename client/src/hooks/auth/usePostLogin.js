@@ -18,7 +18,7 @@ const usePostLogin = () => {
       });
       if (response.ok) {
         const data = await response.json();
-        login({ email: data.email, role: data.role }, data.token);
+        login({ email: data.email, role: data.role, id: data._id }, data.token);
         navigate('/');
       } else {
         const error = await response.json();
