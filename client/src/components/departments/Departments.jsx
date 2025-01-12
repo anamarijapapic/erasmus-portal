@@ -91,7 +91,6 @@ const Departments = () => {
   };
 
   const openEditModal = (department) => {
-    console.log('pozvano', department);
     setEditDepartment(department);
     setIsEditModalOpen(true);
   };

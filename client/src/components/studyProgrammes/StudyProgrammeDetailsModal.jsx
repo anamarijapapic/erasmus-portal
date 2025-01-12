@@ -2,7 +2,6 @@ import { Modal, Button } from 'flowbite-react';
 
 const StudyProgrammeDetailsModal = ({ isOpen, onClose, studyProgramme }) => {
   if (!studyProgramme) return null;
-  console.log(studyProgramme.departmentId);
   return (
     <Modal show={isOpen} onClose={onClose}>
       <Modal.Header>StudyProgramme Details</Modal.Header>
