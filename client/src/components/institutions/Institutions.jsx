@@ -16,6 +16,7 @@ import { HiSearch } from 'react-icons/hi';
 import InstitutionDetailsModal from './InstitutionDetailsModal';
 import CreateInstitutionModal from './CreateInstitutionModal';
 import EditInstitutionModal from './EditInstitutionModal';
+import useGetUsers from '../../hooks/users/useGetUsers';
 
 const Institutions = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -52,6 +53,8 @@ const Institutions = () => {
     setCurrentPage,
     refreshInstitutions,
   } = useGetInstitutions(searchQuery, countryFilter, limit);
+
+  const { users } = useGetUsers('', '', '', '', null);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -295,6 +298,7 @@ const Institutions = () => {
         isOpen={isCreateModalOpen}
         onClose={closeCreateModal}
         institution={newInstitution}
+        users={users}
         onChange={handleCreateInstitutionChange}
         onSubmit={handleCreateInstitutionSubmit}
       />
@@ -303,6 +307,7 @@ const Institutions = () => {
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
         institution={editInstitution}
+        users={users}
         onChange={handleEditInstitutionChange}
         onSubmit={handleEditInstitutionSubmit}
       />
