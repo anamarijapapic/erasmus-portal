@@ -4,6 +4,7 @@ const CreateUserModal = ({
   isOpen,
   onClose,
   user,
+  loggedInUser,
   onChange,
   onSubmit,
   studyProgrammes,
@@ -67,6 +68,7 @@ const CreateUserModal = ({
               value={user.dateOfBirth}
               onChange={onChange}
               required
+              max={new Date().toISOString().split("T")[0]} 
             />
           </div>
           <div>
@@ -97,6 +99,8 @@ const CreateUserModal = ({
               value={user.pinOIB}
               onChange={onChange}
               required
+              min={11}
+              max={11}
             />
           </div>
           <div>
@@ -107,6 +111,8 @@ const CreateUserModal = ({
               value={user.idCardNumber}
               onChange={onChange}
               required
+              max={9}
+              min={9}
             />
           </div>
           <div>
@@ -127,6 +133,7 @@ const CreateUserModal = ({
               value={user.contactNumber}
               onChange={onChange}
               required
+              min={8}
             />
           </div>
           <div>
@@ -159,10 +166,14 @@ const CreateUserModal = ({
               required
             >
               <option value="">Select Role</option>
-              <option value="admin">Admin</option>
+              {loggedInUser?.role === 'admin' && (
+                <>
+                  <option value="admin">Admin</option>
+                  <option value="coordinator">Coordinator</option>
+                </>
+              )}
               <option value="student">Student</option>
               <option value="staff">Staff</option>
-              <option value="coordinator">Coordinator</option>
             </Select>
           </div>
           <div>
@@ -174,11 +185,39 @@ const CreateUserModal = ({
               onChange={onChange}
             >
               <option value="">Select Study Programme</option>
-              {studyProgrammes.map((studyProgramme) => (
-                <option key={studyProgramme._id} value={studyProgramme._id}>
-                  {studyProgramme.name}
-                </option>
-              ))}
+              {loggedInUser?.role === 'admin' && (
+                <>
+                  {studyProgrammes.map((studyProgramme) => (
+                    <option key={studyProgramme._id} value={studyProgramme._id}>
+                      {studyProgramme.name}
+                    </option>
+                  ))}
+                </>
+              )}
+              {loggedInUser?.role === 'coordinator' && (
+                <>
+                  {studyProgrammes
+                    .filter((studyProgramme) => {
+                      const contactPersonIdforInstitutions =
+                        studyProgramme.departmentId.institutionId
+                          .contactPersonId?._id;
+                      const contactPersonIdforDepartments =
+                        studyProgramme.departmentId.contactPersonId?._id;
+                      return (
+                        contactPersonIdforInstitutions === loggedInUser.id ||
+                        contactPersonIdforDepartments === loggedInUser.id
+                      );
+                    })
+                    .map((studyProgramme) => (
+                      <option
+                        key={studyProgramme._id}
+                        value={studyProgramme._id}
+                      >
+                        {studyProgramme.name}
+                      </option>
+                    ))}
+                </>
+              )}
             </Select>
           </div>
           <Button type="submit">Create</Button>

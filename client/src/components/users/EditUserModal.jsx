@@ -69,6 +69,7 @@ const EditUserModal = ({
               value={user.dateOfBirth.split('T')[0]}
               onChange={onChange}
               required
+              max={new Date().toISOString().split('T')[0]}
             />
           </div>
           <div>
@@ -99,6 +100,8 @@ const EditUserModal = ({
               value={user.pinOIB}
               onChange={onChange}
               required
+              min={11}
+              max={11}
             />
           </div>
           <div>
@@ -109,6 +112,8 @@ const EditUserModal = ({
               value={user.idCardNumber}
               onChange={onChange}
               required
+              max={9}
+              min={9}
             />
           </div>
           <div>
@@ -129,6 +134,7 @@ const EditUserModal = ({
               value={user.contactNumber}
               onChange={onChange}
               required
+              min={8}
             />
           </div>
           <div>

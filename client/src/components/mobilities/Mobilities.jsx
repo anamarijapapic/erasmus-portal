@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import useGetMobilities from '../../hooks/mobilities/useGetMobilities';
 import useCreateMobility from '../../hooks/mobilities/useCreateMobility';
 import useEditMobility from '../../hooks/mobilities/useEditMobility';
@@ -15,12 +16,15 @@ import {
   Button,
   Modal,
 } from 'flowbite-react';
-import { HiSearch } from 'react-icons/hi';
+import { GoInfo } from 'react-icons/go';
+import { TbEdit } from 'react-icons/tb';
+import { MdOutlineDelete } from 'react-icons/md';
 import MobilityDetailsModal from './MobilityDetailsModal';
 import CreateMobilityModal from './CreateMobilityModal';
 import EditMobilityModal from './EditMobilityModal';
 
 const Mobilities = () => {
+  const { user: loggedInUser } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [homeInstitutionFilter, setHomeInstitutionFilter] = useState('');
   const [hostInstitutionFilter, setHostInstitutionFilter] = useState('');
@@ -34,15 +38,15 @@ const Mobilities = () => {
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [newMobility, setNewMobility] = useState({
-    type:'',
-    homeInstitutionId:'',
-    hostStudyProgrammeId:'',
-    numberOfStudentsOrStaff:'',
-    duration:'',
-    homeApplicationDeadline:'',
-    nominationDeadline:'',
-    hostApplicationDeadline:'',
-    season:'',
+    type: '',
+    homeInstitutionId: '',
+    hostStudyProgrammeId: '',
+    numberOfStudentsOrStaff: '',
+    duration: '',
+    homeApplicationDeadline: '',
+    nominationDeadline: '',
+    hostApplicationDeadline: '',
+    season: '',
   });
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -62,9 +66,17 @@ const Mobilities = () => {
     onPageChange,
     setCurrentPage,
     refreshMobilities,
-  } = useGetMobilities(searchQuery, homeInstitutionFilter, hostInstitutionFilter, typeFilter, studyProgrammeFilter, seasonFilter, limit);
+  } = useGetMobilities(
+    searchQuery,
+    homeInstitutionFilter,
+    hostInstitutionFilter,
+    typeFilter,
+    studyProgrammeFilter,
+    seasonFilter,
+    limit
+  );
 
-  const { studyProgrammes } = useGetStudyProgrammes('','','','', null);
+  const { studyProgrammes } = useGetStudyProgrammes('', '', '', '', null);
   const { institutions } = useGetInstitutions('', '', null);
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -111,15 +123,15 @@ const Mobilities = () => {
   const closeCreateModal = () => {
     setIsCreateModalOpen(false);
     setNewMobility({
-        type:'',
-        homeInstitutionId:'',
-        hostStudyProgrammeId:'',
-        numberOfStudentsOrStaff:'',
-        duration:'',
-        homeApplicationDeadline:'',
-        nominationDeadline:'',
-        hostApplicationDeadline:'',
-        season:'',
+      type: '',
+      homeInstitutionId: '',
+      hostStudyProgrammeId: '',
+      numberOfStudentsOrStaff: '',
+      duration: '',
+      homeApplicationDeadline: '',
+      nominationDeadline: '',
+      hostApplicationDeadline: '',
+      season: '',
     });
   };
 
@@ -208,11 +220,11 @@ const Mobilities = () => {
                 value={homeInstitutionFilter}
                 onChange={handleHomeInstitutionChange}
               >
-               <option value="">All home institutions</option>
+                <option value="">All home institutions</option>
                 {institutions.map((institution) => (
-                <option key={institution._id} value={institution._id}>
+                  <option key={institution._id} value={institution._id}>
                     {institution.name}
-                </option>
+                  </option>
                 ))}
               </Select>
             </div>
@@ -228,11 +240,14 @@ const Mobilities = () => {
                 value={hostInstitutionFilter}
                 onChange={handleHostInstitutionChange}
               >
-               <option value="">All host institutions</option>
+                <option value="">All host institutions</option>
                 {studyProgrammes.map((program) => (
-                <option key={program.departmentId.institutionId._id} value={program.departmentId.institutionId._id}>
+                  <option
+                    key={program.departmentId.institutionId._id}
+                    value={program.departmentId.institutionId._id}
+                  >
                     {program.departmentId.institutionId.name}
-                </option>
+                  </option>
                 ))}
               </Select>
             </div>
@@ -243,7 +258,8 @@ const Mobilities = () => {
               <Select
                 id="type-filter"
                 value={typeFilter}
-                onChange={handleTypeChange}>
+                onChange={handleTypeChange}
+              >
                 <option value="">Select type</option>
                 <option value="studijski">Studijski</option>
                 <option value="praksa">Praksa</option>
@@ -262,11 +278,11 @@ const Mobilities = () => {
                 value={studyProgrammeFilter}
                 onChange={handleStudyProgrammeChange}
               >
-               <option value="">All study programmes</option>
+                <option value="">All study programmes</option>
                 {studyProgrammes.map((program) => (
-                <option key={program._id} value={program._id}>
+                  <option key={program._id} value={program._id}>
                     {program.name}
-                </option>
+                  </option>
                 ))}
               </Select>
             </div>
@@ -281,9 +297,7 @@ const Mobilities = () => {
               >
                 <option value="">All seasons</option>
                 {[
-                  ...new Set(
-                    mobilities.map((mobility) => mobility.season)
-                  ),
+                  ...new Set(mobilities.map((mobility) => mobility.season)),
                 ].map((season) => (
                   <option key={season} value={season}>
                     {season}
@@ -327,41 +341,53 @@ const Mobilities = () => {
                 <Table.HeadCell>Home institution</Table.HeadCell>
                 <Table.HeadCell>Host study programme</Table.HeadCell>
                 <Table.HeadCell>Duration</Table.HeadCell>
+                <Table.HeadCell>Number of participants</Table.HeadCell>
                 <Table.HeadCell>Season</Table.HeadCell>
                 <Table.HeadCell>
-                  <span className="sr-only">Details</span>
-                </Table.HeadCell>
-                <Table.HeadCell>
-                  <span className="sr-only">Edit</span>
+                  <span className="sr-only">Actions</span>
                 </Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
                 {mobilities.map((mobility) => (
                   <Table.Row key={mobility._id}>
                     <Table.Cell>{mobility.homeInstitutionId.name}</Table.Cell>
-                    <Table.Cell>{mobility.hostStudyProgrammeId.name}
-                    {' '}
-                        {mobility.hostStudyProgrammeId.departmentId.institutionId.name}</Table.Cell>
+                    <Table.Cell>
+                      {mobility.hostStudyProgrammeId.name}{' '}
+                      {
+                        mobility.hostStudyProgrammeId.departmentId.institutionId
+                          .name
+                      }
+                    </Table.Cell>
                     <Table.Cell>{mobility.duration} months</Table.Cell>
+                    <Table.Cell>{mobility.numberOfStudentsOrStaff}</Table.Cell>
                     <Table.Cell>{mobility.season}</Table.Cell>
                     <Table.Cell>
                       <button
-                        className="button"
+                        className="button mr-2"
                         onClick={() => openModal(mobility)}
                       >
-                        Details
+                        <GoInfo
+                          className="text-blue-400"
+                          style={{ fontSize: '1.5rem' }}
+                        />
                       </button>
                       <button
-                        className="button"
+                        className="button mr-2"
                         onClick={() => openEditModal(mobility)}
                       >
-                        Edit
+                        <TbEdit
+                          className="text-green-400"
+                          style={{ fontSize: '1.5rem' }}
+                        />
                       </button>
                       <button
-                        className="button"
+                        className="button mr-2"
                         onClick={() => openDeleteModal(mobility)}
                       >
-                        Delete
+                        <MdOutlineDelete
+                          className="text-red-400"
+                          style={{ fontSize: '1.5rem' }}
+                        />
                       </button>
                     </Table.Cell>
                   </Table.Row>
@@ -378,9 +404,9 @@ const Mobilities = () => {
       </section>
 
       <MobilityDetailsModal
-       isOpen={isModalOpen}
-       onClose={closeModal}
-       mobility={selectedMobility}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        mobility={selectedMobility}
       />
 
       <CreateMobilityModal

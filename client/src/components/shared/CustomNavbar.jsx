@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button, DarkThemeToggle, Navbar } from 'flowbite-react';
 
 const CustomNavbar = () => {
-  const { user } = useAuth();
+  const { user: loggedInUser } = useAuth();
   const { postLogout } = usePostLogout();
 
   const handleLogout = async () => {
@@ -25,7 +25,7 @@ const CustomNavbar = () => {
         </span>
       </Navbar.Brand>
       <div className="flex md:order-2">
-        {user ? (
+        {loggedInUser ? (
           <>
             <Button className="ml-4" onClick={handleLogout}>
               Logout
@@ -39,7 +39,7 @@ const CustomNavbar = () => {
         <DarkThemeToggle />
         <Navbar.Toggle />
       </div>
-      {user && (
+      {loggedInUser && (
         <Navbar.Collapse>
           <NavLink to="/" end>
             {({ isActive }) => (
@@ -48,20 +48,24 @@ const CustomNavbar = () => {
               </Navbar.Link>
             )}
           </NavLink>
-          <NavLink to="/users">
-            {({ isActive }) => (
-              <Navbar.Link as="div" active={isActive}>
-                Users
-              </Navbar.Link>
-            )}
-          </NavLink>
-          <NavLink to="/subjectAreas">
-            {({ isActive }) => (
-              <Navbar.Link as="div" active={isActive}>
-                Subject areas
-              </Navbar.Link>
-            )}
-          </NavLink>
+          {['admin', 'coordinator'].includes(loggedInUser?.role) && (
+            <NavLink to="/users">
+              {({ isActive }) => (
+                <Navbar.Link as="div" active={isActive}>
+                  Users
+                </Navbar.Link>
+              )}
+            </NavLink>
+          )}
+          {loggedInUser?.role === 'admin' && (
+            <NavLink to="/subjectAreas">
+              {({ isActive }) => (
+                <Navbar.Link as="div" active={isActive}>
+                  Subject areas
+                </Navbar.Link>
+              )}
+            </NavLink>
+          )}
           <NavLink to="/studyProgrammes">
             {({ isActive }) => (
               <Navbar.Link as="div" active={isActive}>
@@ -80,6 +84,13 @@ const CustomNavbar = () => {
             {({ isActive }) => (
               <Navbar.Link as="div" active={isActive}>
                 Institutions
+              </Navbar.Link>
+            )}
+          </NavLink>
+          <NavLink to="/mobilities">
+            {({ isActive }) => (
+              <Navbar.Link as="div" active={isActive}>
+                Mobilities
               </Navbar.Link>
             )}
           </NavLink>
