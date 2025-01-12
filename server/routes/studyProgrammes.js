@@ -15,6 +15,6 @@ router.get('/:id', getStudyProgramme);
 
 router.post('/', createStudyProgramme);
 router.delete('/:id', deleteStudyProgramme);
-router.patch('/editStudyProgramme/:id', updateStudyProgramme);
+router.put('/:id', updateStudyProgramme);
 
 module.exports = router;
