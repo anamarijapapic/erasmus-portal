@@ -1,10 +1,16 @@
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 const useCreateApplication = () => {
   const [error, setError] = useState(null);
+  const { user: loggedUser } = useAuth();
 
   const createApplication = async (application) => {
     try {
+      console.log('ode si ali je log null: ', JSON.stringify(loggedUser));
+      if (loggedUser.role === 'student' || loggedUser.role === 'staff') {
+        application.userId = loggedUser.id;
+      }
       const response = await fetch('http://localhost:3000/applications', {
         method: 'POST',
         headers: {

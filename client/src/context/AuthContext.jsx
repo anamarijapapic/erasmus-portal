@@ -24,11 +24,12 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (user, token) => {
+  const login = (user, token, id) => {
     setUser(user);
     setAuthToken(token);
     localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('authToken', token);
+    localStorage.setItem('id', id);
   };
 
   const logout = () => {

@@ -4,6 +4,8 @@ import useCreateApplication from '../../hooks/applications/useCreateApplication'
 import useEditApplication from '../../hooks/applications/useEditApplication';
 import useDeleteApplication from '../../hooks/applications/useDeleteApplication';
 import useGetUsers from '../../hooks/users/useGetUsers';
+import useGetMobilities from '../../hooks/mobilities/useGetMobilities';
+import { useAuth } from '../../context/AuthContext';
 import {
   Table,
   Pagination,
@@ -18,6 +20,12 @@ import EditApplicationModal from './EditApplicationModal';
 import FilesModal from './FilesModal';
 
 const Applications = () => {
+  const { user: loggedUser } = useAuth();
+
+  let coming = [];
+  let leaving = [];
+  let myApplications = [];
+
   const [statusFilter, setStatusFilter] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
   const [limit, setLimit] = useState(10);
@@ -27,6 +35,7 @@ const Applications = () => {
   const [selectedApplication, setSelectedApplication] = useState(null);
 
   const { users } = useGetUsers('', '', '', '', null);
+  const { mobilities } = useGetMobilities('', '', '', '', '', '', null);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [newApplication, setNewApplication] = useState({
@@ -170,6 +179,26 @@ const Applications = () => {
     setLimit(10);
   };
 
+  if (loggedUser.role === 'coordinator') {
+    leaving = applications.filter((application) => {
+      return (
+        application.mobilityId.homeInstitutionId.contactPersonId._id ===
+        loggedUser.id
+      );
+    });
+    coming = applications.filter(
+      (application) =>
+        application.mobilityId.hostStudyProgrammeId.departmentId.contactPersonId
+          ._id === loggedUser.id
+    );
+  }
+
+  if (loggedUser.role === 'staff' || loggedUser.role === 'student') {
+    myApplications = applications.filter((application) => {
+      return application.userId._id === loggedUser.id;
+    });
+  }
+
   return (
     <>
       <section className="py-10 bg-white dark:bg-gray-900">
@@ -184,7 +213,7 @@ const Applications = () => {
                 value={statusFilter}
                 onChange={handleStatusChange}
               >
-                <option value="">All stasuses</option>
+                <option value="">All statuses</option>
                 <option value="prijavljeno">Prijavljeno</option>
                 <option value="odobreno">Odboreno</option>
                 <option value="odbijeno">Odbijeno</option>
@@ -226,9 +255,11 @@ const Applications = () => {
             <Button className="m-1" onClick={handleReset}>
               Clear
             </Button>
-            <Button className="m-1" onClick={openCreateModal}>
-              Create Applications
-            </Button>
+            {loggedUser.role !== 'coordinator' && (
+              <Button className="m-1" onClick={openCreateModal}>
+                Create Applications
+              </Button>
+            )}
           </div>
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <Table hoverable>
@@ -250,48 +281,182 @@ const Applications = () => {
                 </Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
-                {applications.map((application) => (
-                  <Table.Row key={application._id}>
-                    <Table.Cell>
-                      {application.userId.firstName}{' '}
-                      {application.userId.lastName}
-                    </Table.Cell>
-                    <Table.Cell>{application.userId.email}</Table.Cell>
-                    <Table.Cell>
-                      <a href={`tel:${application.userId.contactNumber}`}>
-                        {application.userId.contactNumber}
-                      </a>
-                    </Table.Cell>
-                    <Table.Cell>{application.status}</Table.Cell>
-                    <Table.Cell>{application.rating}</Table.Cell>
-                    <Table.Cell>
-                      <button
-                        className="button"
-                        onClick={() => openModal(application)}
-                      >
-                        Details
-                      </button>
-                      <button
-                        className="button"
-                        onClick={() => openFilesModal(application)}
-                      >
-                        Attached Files
-                      </button>
-                      <button
-                        className="button"
-                        onClick={() => openDeleteModal(application)}
-                      >
-                        Delete
-                      </button>
-                      <button
-                        className="button"
-                        onClick={() => openEditModal(application)}
-                      >
-                        Edit
-                      </button>
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
+                {loggedUser.role === 'coordinator' &&
+                  coming.map((application) => (
+                    <Table.Row key={application._id} className="text-green-700">
+                      <Table.Cell>
+                        {application.userId.firstName}{' '}
+                        {application.userId.lastName}
+                      </Table.Cell>
+                      <Table.Cell>{application.userId.email}</Table.Cell>
+                      <Table.Cell>
+                        <a href={`tel:${application.userId.contactNumber}`}>
+                          {application.userId.contactNumber}
+                        </a>
+                      </Table.Cell>
+                      <Table.Cell>{application.status}</Table.Cell>
+                      <Table.Cell>{application.rating}</Table.Cell>
+                      <Table.Cell>
+                        <button
+                          className="button"
+                          onClick={() => openModal(application)}
+                        >
+                          Details
+                        </button>
+                        <button
+                          className="button"
+                          onClick={() => openFilesModal(application)}
+                        >
+                          Attached Files
+                        </button>
+                        <button
+                          className="button"
+                          onClick={() => openDeleteModal(application)}
+                        >
+                          Delete
+                        </button>
+                        <button
+                          className="button"
+                          onClick={() => openEditModal(application)}
+                        >
+                          Edit
+                        </button>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                {loggedUser.role === 'coordinator' &&
+                  leaving.map((application) => (
+                    <Table.Row key={application._id} className="text-red-700">
+                      <Table.Cell>
+                        {application.userId.firstName}{' '}
+                        {application.userId.lastName}
+                      </Table.Cell>
+                      <Table.Cell>{application.userId.email}</Table.Cell>
+                      <Table.Cell>
+                        <a href={`tel:${application.userId.contactNumber}`}>
+                          {application.userId.contactNumber}
+                        </a>
+                      </Table.Cell>
+                      <Table.Cell>{application.status}</Table.Cell>
+                      <Table.Cell>{application.rating}</Table.Cell>
+                      <Table.Cell>
+                        <button
+                          className="button"
+                          onClick={() => openModal(application)}
+                        >
+                          Details
+                        </button>
+                        <button
+                          className="button"
+                          onClick={() => openFilesModal(application)}
+                        >
+                          Attached Files
+                        </button>
+                        <button
+                          className="button"
+                          onClick={() => openDeleteModal(application)}
+                        >
+                          Delete
+                        </button>
+                        <button
+                          className="button"
+                          onClick={() => openEditModal(application)}
+                        >
+                          Edit
+                        </button>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                {loggedUser.role === 'admin' &&
+                  applications.map((application) => (
+                    <Table.Row key={application._id}>
+                      <Table.Cell>
+                        {application.userId.firstName}{' '}
+                        {application.userId.lastName}
+                      </Table.Cell>
+                      <Table.Cell>{application.userId.email}</Table.Cell>
+                      <Table.Cell>
+                        <a href={`tel:${application.userId.contactNumber}`}>
+                          {application.userId.contactNumber}
+                        </a>
+                      </Table.Cell>
+                      <Table.Cell>{application.status}</Table.Cell>
+                      <Table.Cell>{application.rating}</Table.Cell>
+                      <Table.Cell>
+                        <button
+                          className="button"
+                          onClick={() => openModal(application)}
+                        >
+                          Details
+                        </button>
+                        <button
+                          className="button"
+                          onClick={() => openFilesModal(application)}
+                        >
+                          Attached Files
+                        </button>
+                        <button
+                          className="button"
+                          onClick={() => openDeleteModal(application)}
+                        >
+                          Delete
+                        </button>
+                        {loggedUser.role === 'admin' && (
+                          <button
+                            className="button"
+                            onClick={() => openEditModal(application)}
+                          >
+                            Edit
+                          </button>
+                        )}
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                {['stuff', 'student'].includes(loggedUser?.role) &&
+                  myApplications.map((application) => (
+                    <Table.Row key={application._id}>
+                      <Table.Cell>
+                        {application.userId.firstName}{' '}
+                        {application.userId.lastName}
+                      </Table.Cell>
+                      <Table.Cell>{application.userId.email}</Table.Cell>
+                      <Table.Cell>
+                        <a href={`tel:${application.userId.contactNumber}`}>
+                          {application.userId.contactNumber}
+                        </a>
+                      </Table.Cell>
+                      <Table.Cell>{application.status}</Table.Cell>
+                      <Table.Cell>{application.rating}</Table.Cell>
+                      <Table.Cell>
+                        <button
+                          className="button"
+                          onClick={() => openModal(application)}
+                        >
+                          Details
+                        </button>
+                        <button
+                          className="button"
+                          onClick={() => openFilesModal(application)}
+                        >
+                          Attached Files
+                        </button>
+                        <button
+                          className="button"
+                          onClick={() => openDeleteModal(application)}
+                        >
+                          Delete
+                        </button>
+                        {loggedUser.role === 'admin' && (
+                          <button
+                            className="button"
+                            onClick={() => openEditModal(application)}
+                          >
+                            Edit
+                          </button>
+                        )}
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
               </Table.Body>
             </Table>
           </div>
@@ -313,7 +478,6 @@ const Applications = () => {
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
         application={editApplication}
-        users={users}
         onChange={handleEditApplicationChange}
         onSubmit={handleEditApplicationSubmit}
       />
@@ -323,6 +487,8 @@ const Applications = () => {
         onClose={closeCreateModal}
         application={newApplication}
         users={users}
+        loggedUser={loggedUser}
+        mobilities={mobilities}
         onChange={handleCreateApplicationChange}
         onSubmit={handleCreateApplicationSubmit}
       />

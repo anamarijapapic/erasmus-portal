@@ -1,10 +1,9 @@
-import { Modal, Button, Label, TextInput, Select } from 'flowbite-react';
+import { Modal, Button, Label, Select, TextInput } from 'flowbite-react';
 
 const EditApplicationModal = ({
   isOpen,
   onClose,
   application,
-  users,
   onChange,
   onSubmit,
 }) => {
@@ -16,33 +15,6 @@ const EditApplicationModal = ({
       <Modal.Body>
         <form onSubmit={onSubmit} className="space-y-6">
           <div>
-            <Label htmlFor="userId" value="User" />
-            <Select
-              id="userId"
-              name="userId"
-              value={application.userId._id}
-              onChange={onChange}
-              required
-            >
-              <option value="">Select a user</option>
-              {users.map((user) => (
-                <option key={user._id} value={user._id}>
-                  {user.firstName} {user.lastName}
-                </option>
-              ))}
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="mobilityId" value="Mobility" />
-            <TextInput
-              id="mobilityId"
-              name="mobilityId"
-              value={application.mobilityId._id}
-              onChange={onChange}
-              required
-            />
-          </div>
-          <div>
             <Label htmlFor="status" value="Status" />
             <Select
               id="status"
@@ -51,11 +23,24 @@ const EditApplicationModal = ({
               onChange={onChange}
               required
             >
-              <option value="">Select Role</option>
               <option value="prijavljeno">Prijavljeno</option>
               <option value="odobreno">Odobreno</option>
               <option value="odbijeno">Odbijeno</option>
             </Select>
+          </div>
+          <div>
+            <Label htmlFor="rating" value="Rating" />
+            <TextInput
+              id="rating"
+              name="rating"
+              type="number"
+              required
+              max={100}
+              min={0}
+              step={0.1}
+              value={application.rating}
+              onChange={onChange}
+            />
           </div>
           <Button type="submit">Save</Button>
         </form>
