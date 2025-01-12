@@ -1,0 +1,11 @@
+[
+    {"_id":"67842f7f320c478f3ed8da4d","name":"Computing","departmentId":"678428d31d0753f07d6879c9","subjectAreaId":"6783fb35e6ec10dbab372ff3","academicEqfLevel":"Level 6"},
+    {"_id":"67842f8e320c478f3ed8da5a","name":"Applied Computing","departmentId":"678428d31d0753f07d6879c9","subjectAreaId":"6783fb35e6ec10dbab372ff3","academicEqfLevel":"Level 7"},
+    {"_id":"67842fc1320c478f3ed8da67","name":"Trade and Tourism Management","departmentId":"678428d31d0753f07d6879c9","subjectAreaId":"6783fb35e6ec10dbab372ff1","academicEqfLevel":"Level 6"},
+    {"_id":"678430b0320c478f3ed8dab0","name":"Croatian Language and Literature","departmentId":"6784294a1d0753f07d6879d3","subjectAreaId":"6783fb35e6ec10dbab372ff6","academicEqfLevel":"Level 6"},
+    {"_id":"678430c4320c478f3ed8dabd","name":"Art History","departmentId":"6784294a1d0753f07d6879d3","subjectAreaId":"6783fb35e6ec10dbab372ff5","academicEqfLevel":"Level 6"},
+    {"_id":"678438f6d1d382e83012bab4","name":"Physics and Mathematics","departmentId":"67842bf01d0753f07d687a05","subjectAreaId":"6783fb35e6ec10dbab372ff2","academicEqfLevel":"Level 7"},
+    {"_id":"6784392bd1d382e83012bac1","name":"Biology and Ecology with Nature Conservation","departmentId":"67842bf01d0753f07d687a05","subjectAreaId":"6783fb35e6ec10dbab372ff2","academicEqfLevel":"Level 7"},
+    {"_id":"67843a25d1d382e83012bace","name":"Art History","departmentId":"67842d091d0753f07d687a19","subjectAreaId":"6783fb35e6ec10dbab372ff0","academicEqfLevel":"Level 6"},
+    {"_id":"67843a3ad1d382e83012badb","name":"Applied Design","departmentId":"67842d091d0753f07d687a19","subjectAreaId":"6783fb35e6ec10dbab372ff0","academicEqfLevel":"Level 7"}
+]

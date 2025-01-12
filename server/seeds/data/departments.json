@@ -1,0 +1,11 @@
+[
+    {"_id":"678428d31d0753f07d6879c9","name":"University Department of Professional Studies","address":"Kopilica 5, 21000 Split","contactPersonId":"67841d19f5aeb9ddf6aa71ec","institutionId":"678422bac105e079525a563a"},
+    {"_id":"6784294a1d0753f07d6879d3","name":"Faculty of Humanities and Social Science","address":"Poljička cesta 35, 21000 Split","contactPersonId":"67841d19f5aeb9ddf6aa71ec","institutionId":"678422bac105e079525a563a"},
+    {"_id":"678429ac1d0753f07d6879dd","name":"The School of Medicine - MEFST","address":"Šoltanska 2A, 21000 Split","contactPersonId":"67841d19f5aeb9ddf6aa71ec","institutionId":"678422bac105e079525a563a"},
+    {"_id":"67842a5b1d0753f07d6879e7","name":"Faculty of Electrical and Information Engineering","address":"Rechbauerstraße 12, 8010 Graz","contactPersonId":"67841d19f5aeb9ddf6aa71ef","institutionId":"6784232ec105e079525a5640"},
+    {"_id":"67842b1f1d0753f07d6879f1","name":"Faculté des Lettres et Sciences humaines","address":"3 rue des Archives, CS93837, 29238 Brest cedex 3","contactPersonId":"67841d1af5aeb9ddf6aa71f2","institutionId":"678423a4c105e079525a5646"},
+    {"_id":"67842b3c1d0753f07d6879fb","name":"Faculté des Sciences et Techniques","address":"3 rue des Archives, CS93837, 29238 Brest cedex 3","contactPersonId":"67841d1af5aeb9ddf6aa71f2","institutionId":"678423a4c105e079525a5646"},
+    {"_id":"67842bf01d0753f07d687a05","name":"Faculty of Natural Sciences and Mathematics","address":"Koroška cesta 160, 2000 Maribor","contactPersonId":"67841d1af5aeb9ddf6aa71f4","institutionId":"67842407c105e079525a564c"},
+    {"_id":"67842c6e1d0753f07d687a0f","name":"Faculty of Medicine","address":"Taborska ulica 8, 2000 Maribor","contactPersonId":"67841d1af5aeb9ddf6aa71f4","institutionId":"67842407c105e079525a564c"},
+    {"_id":"67842d091d0753f07d687a19","name":"Faculty of Arts","address":"Aškerčeva 2, 1000 Ljubljana","contactPersonId":"67841d1af5aeb9ddf6aa71f6","institutionId":"6784247ac105e079525a5652"}
+]
