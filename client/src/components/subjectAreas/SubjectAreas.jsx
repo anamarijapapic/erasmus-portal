@@ -9,22 +9,22 @@ import {
   Label,
   Select,
   Button,
-  Modal
+  Modal,
 } from 'flowbite-react';
 import { HiSearch } from 'react-icons/hi';
+import { MdOutlineDelete } from 'react-icons/md';
 import CreateSubjectAreaModal from './CreateSubjectAreaModal';
 
 const SubjectAreas = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [limit, setLimit] = useState(10);
-  const { subjectAreas, currentPage, totalPages, onPageChange, refreshSubjectAreas } =
-    useGetSubjectAreas(
-      searchQuery,
-      limit
-    );
-
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [selectedSubjectArea, setSelectedSubjectArea] = useState(null);
+  const {
+    subjectAreas,
+    currentPage,
+    totalPages,
+    onPageChange,
+    refreshSubjectAreas,
+  } = useGetSubjectAreas(searchQuery, limit);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [newSubjectArea, setNewSubjectArea] = useState({
@@ -141,7 +141,10 @@ const SubjectAreas = () => {
                         className="button"
                         onClick={() => openDeleteModal(subjectArea)}
                       >
-                        Delete
+                        <MdOutlineDelete
+                          className="text-red-400"
+                          style={{ fontSize: '1.5rem' }}
+                        />
                       </button>
                     </Table.Cell>
                   </Table.Row>

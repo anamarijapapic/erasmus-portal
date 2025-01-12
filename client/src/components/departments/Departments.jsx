@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import useGetDepartments from '../../hooks/departments/useGetDepartments';
 import DepartmentDetailsModal from './DepartmentDetailsModal';
 import CreateDepartmentModal from './CreateDepartmentModal';
@@ -12,12 +13,17 @@ import {
   Modal,
   Button,
 } from 'flowbite-react';
+import { GoInfo } from 'react-icons/go';
+import { TbEdit } from 'react-icons/tb';
+import { MdOutlineDelete } from 'react-icons/md';
 import useEditDepartment from '../../hooks/departments/useEditDepartment';
 import EditDepartmentModal from './EditDepartmentModal';
 import useDeleteDepartment from '../../hooks/departments/useDeleteDepartment';
 import useGetInstitutions from '../../hooks/institutions/useGetInstitutions';
+import useGetUsers from '../../hooks/users/useGetUsers';
 
 const Departments = () => {
+  const { user: loggedInUser } = useAuth();
   const [institutionFilter, setInstitutionFilter] = useState('');
   const [countryFilter, setCountryFilter] = useState('');
   const [limit, setLimit] = useState(10);
@@ -30,6 +36,8 @@ const Departments = () => {
     onPageChange,
     refreshDepartments,
   } = useGetDepartments(institutionFilter, countryFilter, limit);
+
+  const { users } = useGetUsers('', '', '', '', null);
 
   const { institutions } = useGetInstitutions(searchQuery, '', null);
 
@@ -226,9 +234,11 @@ const Departments = () => {
               </Select>
             </div>
           </div>
-          <div className="flex justify-end">
-            <Button onClick={openCreateModal}>Create Department</Button>
-          </div>
+          {loggedInUser?.role === 'admin' && (
+            <div className="flex justify-end">
+              <Button onClick={openCreateModal}>Create Department</Button>
+            </div>
+          )}
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <Table hoverable>
               <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800">
@@ -240,10 +250,8 @@ const Departments = () => {
               <Table.Head>
                 <Table.HeadCell>Name</Table.HeadCell>
                 <Table.HeadCell>Address</Table.HeadCell>
-                {/* <Table.HeadCell>Email</Table.HeadCell>
-                <Table.HeadCell>Gender</Table.HeadCell> */}
                 <Table.HeadCell>
-                  <span className="sr-only">Edit</span>
+                  <span className="sr-only">Actions</span>
                 </Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
@@ -251,28 +259,38 @@ const Departments = () => {
                   <Table.Row key={department._id}>
                     <Table.Cell>{department.name}</Table.Cell>
                     <Table.Cell>{department.address}</Table.Cell>
-                    {/* <Table.Cell>{department.contactPersonId}</Table.Cell>
-                    <Table.Cell>{department.institutionId}</Table.Cell> */}
                     <Table.Cell>
                       <button
-                        className="button"
+                        className="button mr-2"
                         onClick={() => openModal(department)}
                       >
-                        Details
+                        <GoInfo
+                          className="text-blue-400"
+                          style={{ fontSize: '1.5rem' }}
+                        />
                       </button>
-
-                      <button
-                        className="button"
-                        onClick={() => openEditModal(department)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="button"
-                        onClick={() => openDeleteModal(department)}
-                      >
-                        Delete
-                      </button>
+                      {loggedInUser?.role === 'admin' && (
+                        <>
+                          <button
+                            className="button mr-2"
+                            onClick={() => openEditModal(department)}
+                          >
+                            <TbEdit
+                              className="text-green-400"
+                              style={{ fontSize: '1.5rem' }}
+                            />
+                          </button>
+                          <button
+                            className="button mr-2"
+                            onClick={() => openDeleteModal(department)}
+                          >
+                            <MdOutlineDelete
+                              className="text-red-400"
+                              style={{ fontSize: '1.5rem' }}
+                            />
+                          </button>
+                        </>
+                      )}
                     </Table.Cell>
                   </Table.Row>
                 ))}
@@ -286,7 +304,6 @@ const Departments = () => {
           />
         </div>
       </section>
-
       <DepartmentDetailsModal
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -298,19 +315,19 @@ const Departments = () => {
         onClose={closeCreateModal}
         department={newDepartment}
         institutions={institutions}
+        users={users}
         onChange={handleCreateDepartmentChange}
         onSubmit={handleCreateDepartmentSubmit}
       />
-
       <EditDepartmentModal
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
         department={editDepartment}
         institutions={institutions}
+        users={users}
         onChange={handleEditDepartmentChange}
         onSubmit={handleEditDepartmentSubmit}
       />
-
       <Modal show={isDeleteModalOpen} onClose={closeDeleteModal}>
         <Modal.Header>Delete Department</Modal.Header>
         <Modal.Body>

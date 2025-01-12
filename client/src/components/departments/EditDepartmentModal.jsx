@@ -5,6 +5,7 @@ const EditDepartmentModal = ({
   onClose,
   department,
   institutions,
+  users,
   onChange,
   onSubmit,
 }) => {
@@ -36,12 +37,22 @@ const EditDepartmentModal = ({
           </div>
           <div>
             <Label htmlFor="contactPersonId" value="Contact Person" />
-            <TextInput
+            <Select
               id="contactPersonId"
               name="contactPersonId"
               value={department.contactPersonId._id}
               onChange={onChange}
-            />
+              required
+            >
+              <option value="">Select a Contact person</option>
+              {users
+                .filter((user) => user.role === 'coordinator')
+                .map((user) => (
+                  <option key={user._id} value={user._id}>
+                    {user.firstName} {user.lastName}
+                  </option>
+                ))}
+            </Select>
           </div>
           <div>
             <Label htmlFor="institutionId" value="Institution" />
