@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import useGetApplications from '../../hooks/applications/useGetApplications';
-// import useCreateInstitution from '../../hooks/institutions/useCreateInstitution';
-// import useEditInstitution from '../../hooks/institutions/useEditInstitution';
-// import useDeleteInstitution from '../../hooks/institutions/useDeleteInstitution';
+import useCreateApplication from '../../hooks/applications/useCreateApplication';
+import useEditApplication from '../../hooks/applications/useEditApplication';
+import useDeleteApplication from '../../hooks/applications/useDeleteApplication';
+import useGetUsers from '../../hooks/users/useGetUsers';
 import {
   Table,
   Pagination,
-  TextInput,
   Label,
   Select,
   Button,
@@ -14,8 +14,8 @@ import {
 } from 'flowbite-react';
 import { HiDownload } from 'react-icons/hi';
 import ApplicationDetailsModal from './ApplicationDetailsModal';
-// import CreateInstitutionModal from './CreateInstitutionModal';
-// import EditInstitutionModal from './EditInstitutionModal';
+import CreateApplicationModal from './CreateApplicationModal';
+import EditApplicationModal from './EditApplicationModal';
 
 const Applications = () => {
   const [statusFilter, setStatusFilter] = useState('');
@@ -26,24 +26,23 @@ const Applications = () => {
   const [isFilesModalOpen, setIsFilesModalOpen] = useState(false);
   const [selectedApplication, setSelectedApplication] = useState(null);
 
-  //   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  //   const [newInstitution, setNewInstitution] = useState({
-  //     name: '',
-  //     erasmusCode: '',
-  //     country: '',
-  //     contactPersonId: '',
-  //     address: '',
-  //   });
+  const { users } = useGetUsers('', '', '', '', null);
 
-  //   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  //   const [editInstitution, setEditInstitution] = useState(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [newApplication, setNewApplication] = useState({
+    userId: '',
+    mobilityId: '',
+  });
 
-  //   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  //   const [deleteInstitution, setDeleteInstitution] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editApplication, setEditApplication] = useState(null);
 
-  //   const { createInstitution } = useCreateInstitution();
-  //   const { editInstitution: updateInstitution } = useEditInstitution();
-  //   const { deleteInstitution: removeInstitution } = useDeleteInstitution();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteApplication, setDeleteApplication] = useState(null);
+
+  const { createApplication } = useCreateApplication();
+  const { editApplication: updateApplication } = useEditApplication();
+  const { deleteApplication: removeApplication } = useDeleteApplication();
 
   const {
     applications,
@@ -86,77 +85,74 @@ const Applications = () => {
     setSelectedApplication(null);
   };
 
-  //   const openCreateModal = () => {
-  //     setIsCreateModalOpen(true);
-  //   };
+  const openCreateModal = () => {
+    setIsCreateModalOpen(true);
+  };
 
-  //   const closeCreateModal = () => {
-  //     setIsCreateModalOpen(false);
-  //     setNewInstitution({
-  //       name: '',
-  //       erasmusCode: '',
-  //       country: '',
-  //       contactPersonId: '',
-  //       address: '',
-  //     });
-  //   };
+  const closeCreateModal = () => {
+    setIsCreateModalOpen(false);
+    setNewApplication({
+      userId: '',
+      mobilityId: '',
+    });
+  };
 
-  //   const openEditModal = (institution) => {
-  //     setEditInstitution(institution);
-  //     setIsEditModalOpen(true);
-  //   };
+  const openEditModal = (application) => {
+    setEditApplication(application);
+    setIsEditModalOpen(true);
+  };
 
-  //   const closeEditModal = () => {
-  //     setIsEditModalOpen(false);
-  //     setEditInstitution(null);
-  //   };
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditApplication(null);
+  };
 
-  //   const openDeleteModal = (institution) => {
-  //     setDeleteInstitution(institution);
-  //     setIsDeleteModalOpen(true);
-  //   };
+  const openDeleteModal = (application) => {
+    setDeleteApplication(application);
+    setIsDeleteModalOpen(true);
+  };
 
-  //   const closeDeleteModal = () => {
-  //     setIsDeleteModalOpen(false);
-  //     setDeleteInstitution(null);
-  //   };
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setDeleteApplication(null);
+  };
 
-  //   const handleCreateInstitutionChange = (event) => {
-  //     const { name, value } = event.target;
-  //     setNewInstitution((prevInstitution) => ({
-  //       ...prevInstitution,
-  //       [name]: value,
-  //     }));
-  //   };
+  const handleCreateApplicationChange = (event) => {
+    const { name, value } = event.target;
+    setNewApplication((prevApplication) => ({
+      ...prevApplication,
+      [name]: value,
+    }));
+  };
 
-  //   const handleEditInstitutionChange = (event) => {
-  //     const { name, value } = event.target;
-  //     setEditInstitution((prevInstitution) => ({
-  //       ...prevInstitution,
-  //       [name]: value,
-  //     }));
-  //   };
+  const handleEditApplicationChange = (event) => {
+    const { name, value } = event.target;
+    setEditApplication((prevApplication) => ({
+      ...prevApplication,
+      [name]: value,
+    }));
+  };
 
-  //   const handleCreateInstitutionSubmit = async (event) => {
-  //     event.preventDefault();
-  //     await createInstitution(newInstitution);
-  //     closeCreateModal();
-  //     refreshInstitutions();
-  //   };
+  const handleCreateApplicationSubmit = async (event) => {
+    event.preventDefault();
+    await createApplication(newApplication);
+    closeCreateModal();
+    refreshApplications();
+  };
 
-  //   const handleEditInstitutionSubmit = async (event) => {
-  //     event.preventDefault();
+  const handleEditApplicationSubmit = async (event) => {
+    event.preventDefault();
 
-  //     await updateInstitution(editInstitution);
-  //     closeEditModal();
-  //     refreshInstitutions();
-  //   };
+    await updateApplication(editApplication);
+    closeEditModal();
+    refreshApplications();
+  };
 
-  //   const handleDeleteInstitutionSubmit = async () => {
-  //     await removeInstitution(deleteInstitution._id);
-  //     closeDeleteModal();
-  //     refreshInstitutions();
-  //   };
+  const handleDeleteApplicationSubmit = async () => {
+    await removeApplication(deleteApplication._id);
+    closeDeleteModal();
+    refreshApplications();
+  };
 
   const handleReset = (event) => {
     setStatusFilter('');
@@ -221,7 +217,9 @@ const Applications = () => {
             <Button className="m-1" onClick={handleReset}>
               Clear
             </Button>
-            <Button className="m-1">Create Applications</Button>
+            <Button className="m-1" onClick={openCreateModal}>
+              Create Applications
+            </Button>
           </div>
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <Table hoverable>
@@ -241,7 +239,7 @@ const Applications = () => {
                 <Table.HeadCell>
                   <button
                     className="button"
-                    onClick={() => openModal(institution)}
+                    onClick={() => openModal(application)}
                   >
                     Details
                   </button>
@@ -278,18 +276,18 @@ const Applications = () => {
                       >
                         Attached Files
                       </button>
-                      {/* <button
+                      <button
                         className="button"
-                        onClick={() => openEditModal(institution)}
+                        onClick={() => openDeleteModal(application)}
                       >
-                        Edit
+                        Delete
                       </button>
                       <button
                         className="button"
-                        onClick={() => openDeleteModal(institution)}
+                        onClick={() => openEditModal(application)}
                       >
-                        Delete
-                      </button> */}
+                        Edit
+                      </button>
                     </Table.Cell>
                   </Table.Row>
                 ))}
@@ -309,36 +307,37 @@ const Applications = () => {
         onClose={closeModal}
         application={selectedApplication}
       />
-      {/*
 
-      <CreateInstitutionModal
-        isOpen={isCreateModalOpen}
-        onClose={closeCreateModal}
-        institution={newInstitution}
-        onChange={handleCreateInstitutionChange}
-        onSubmit={handleCreateInstitutionSubmit}
-      />
-
-      <EditInstitutionModal
+      <EditApplicationModal
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
-        institution={editInstitution}
-        onChange={handleEditInstitutionChange}
-        onSubmit={handleEditInstitutionSubmit}
+        application={editApplication}
+        users={users}
+        onChange={handleEditApplicationChange}
+        onSubmit={handleEditApplicationSubmit}
+      />
+
+      <CreateApplicationModal
+        isOpen={isCreateModalOpen}
+        onClose={closeCreateModal}
+        application={newApplication}
+        users={users}
+        onChange={handleCreateApplicationChange}
+        onSubmit={handleCreateApplicationSubmit}
       />
 
       <Modal show={isDeleteModalOpen} onClose={closeDeleteModal}>
-        <Modal.Header>Delete Institution</Modal.Header>
+        <Modal.Header>Delete Application</Modal.Header>
         <Modal.Body>
-          <p>Are you sure you want to delete this institution?</p>
+          <p>Are you sure you want to delete this application?</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button color="failure" onClick={handleDeleteInstitutionSubmit}>
+          <Button color="failure" onClick={handleDeleteApplicationSubmit}>
             Delete
           </Button>
           <Button onClick={closeDeleteModal}>Cancel</Button>
         </Modal.Footer>
-      </Modal> */}
+      </Modal>
 
       <Modal show={isFilesModalOpen} onClose={closeFilesModal}>
         <Modal.Header>Attached Files</Modal.Header>
