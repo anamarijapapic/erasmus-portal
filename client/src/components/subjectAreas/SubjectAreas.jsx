@@ -83,6 +83,11 @@ const SubjectAreas = () => {
     refreshSubjectAreas();
   };
 
+  const handleReset = (event) => {
+    setSearchQuery('');
+    setLimit(10);
+  };
+
   return (
     <>
       <section className="py-10 bg-white dark:bg-gray-900">
@@ -118,7 +123,12 @@ const SubjectAreas = () => {
             </div>
           </div>
           <div className="flex justify-end">
-            <Button onClick={openCreateModal}>Create Subject Area</Button>
+            <Button className="m-1" onClick={handleReset}>
+              Clear
+            </Button>
+            <Button className="m-1" onClick={openCreateModal}>
+              Create Subject Area
+            </Button>
           </div>
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <Table hoverable>

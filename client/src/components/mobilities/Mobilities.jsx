@@ -24,7 +24,6 @@ import CreateMobilityModal from './CreateMobilityModal';
 import EditMobilityModal from './EditMobilityModal';
 
 const Mobilities = () => {
-  const { user: loggedInUser } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [homeInstitutionFilter, setHomeInstitutionFilter] = useState('');
   const [hostInstitutionFilter, setHostInstitutionFilter] = useState('');

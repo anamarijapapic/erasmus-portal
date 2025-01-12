@@ -172,6 +172,13 @@ const Departments = () => {
     refreshDepartments();
   };
 
+  const handleReset = (event) => {
+    setSearchQuery('');
+    setInstitutionFilter('');
+    setCountryFilter('');
+    setLimit(10);
+  };
+
   return (
     <>
       <section className="py-10 bg-white dark:bg-gray-900">
@@ -234,11 +241,16 @@ const Departments = () => {
               </Select>
             </div>
           </div>
-          {loggedInUser?.role === 'admin' && (
-            <div className="flex justify-end">
-              <Button onClick={openCreateModal}>Create Department</Button>
-            </div>
-          )}
+          <div className="flex justify-end">
+            <Button className="m-1" onClick={handleReset}>
+              Clear
+            </Button>
+            {loggedInUser?.role === 'admin' && (
+              <Button className="m-1" onClick={openCreateModal}>
+                Create Department
+              </Button>
+            )}
+          </div>
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <Table hoverable>
               <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800">
@@ -249,15 +261,40 @@ const Departments = () => {
               </caption>
               <Table.Head>
                 <Table.HeadCell>Name</Table.HeadCell>
+                <Table.HeadCell>Country</Table.HeadCell>
+                <Table.HeadCell>Contact person</Table.HeadCell>
+                <Table.HeadCell>Email</Table.HeadCell>
+                <Table.HeadCell>Contact number</Table.HeadCell>
                 <Table.HeadCell>Address</Table.HeadCell>
-                <Table.HeadCell>
+                <Table.HeadCell className="lg:min-w-[10rem]">
                   <span className="sr-only">Actions</span>
                 </Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
                 {departments.map((department) => (
                   <Table.Row key={department._id}>
-                    <Table.Cell>{department.name}</Table.Cell>
+                    <Table.Cell>
+                      {department.name}{' '}
+                      {department?.institutionId?.name &&
+                        `(${department.institutionId.name})`}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {department?.institutionId?.country}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {department?.contactPersonId?.firstName}{' '}
+                      {department?.contactPersonId?.lastName}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {department?.contactPersonId?.email}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <a
+                        href={`tel:${department?.contactPersonId?.contactNumber}`}
+                      >
+                        {department?.contactPersonId?.contactNumber}
+                      </a>
+                    </Table.Cell>
                     <Table.Cell>{department.address}</Table.Cell>
                     <Table.Cell>
                       <button

@@ -193,6 +193,14 @@ const Users = () => {
     refreshUsers();
   };
 
+  const handleReset = (event) => {
+    setSearchQuery('');
+    setRoleFilter('');
+    setSemesterFilter('');
+    setYearOfStudyFilter('');
+    setLimit(10);
+  };
+
   return (
     <>
       <section className="py-10 bg-white dark:bg-gray-900">
@@ -281,11 +289,16 @@ const Users = () => {
               </Select>
             </div>
           </div>
-          {['admin', 'coordinator'].includes(loggedInUser?.role) && (
-            <div className="flex justify-end">
-              <Button onClick={openCreateModal}>Create User</Button>
-            </div>
-          )}
+          <div className="flex justify-end">
+            <Button className="m-1" onClick={handleReset}>
+              Clear
+            </Button>
+            {['admin', 'coordinator'].includes(loggedInUser?.role) && (
+              <Button className="m-1" onClick={openCreateModal}>
+                Create User
+              </Button>
+            )}
+          </div>
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <Table hoverable>
               <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800">
