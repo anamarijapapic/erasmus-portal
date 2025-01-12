@@ -8,6 +8,10 @@ import ForgotPassword from './components/auth/ForgotPassword';
 import ResetPassword from './components/auth/ResetPassword';
 import NotFound from './components/shared/NotFound';
 import Users from './components/users/Users';
+import SubjectAreas from './components/subjectAreas/SubjectAreas';
+import StudyProgrammes from './components/studyProgrammes/studyProgrammes';
+import Departments from './components/departments/departments';
+import Institutitons from './components/institutions/Institutions';
 
 function App() {
   // const { user } = useAuth();
@@ -25,6 +29,15 @@ function App() {
           path="/auth/reset-password/:userId/:token"
           element={<ResetPassword />}
         />
+
+        {/*Subject area page */}
+        <Route path="/subjectAreas" element={<SubjectAreas />} />
+        {/*Study programme page */}
+        <Route path="/studyProgrammes" element={<StudyProgrammes />} />
+        {/*Institution page */}
+        <Route path="/institutions" element={<Institutitons />} />
+
+        <Route path="/departments" element={<Departments />} />
 
         {/* User page */}
         <Route path="/users" element={<Users />} />

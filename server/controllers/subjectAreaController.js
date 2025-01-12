@@ -1,32 +1,34 @@
 const SubjectArea = require('../models/subjectArea.model');
 
 const getAllSubjectAreas = async (req, res) => {
-  const { searchInput } = req.params;
-  let query = searchInput ? { searchInput } : {};
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
-  const totalPages = Math.ceil(
-    (await SubjectArea.countDocuments(query).lean()) /
-      (parseInt(req.query.limit) || 10)
-  );
-  const skip = (page - 1) * limit;
-  if (searchInput) {
-    const trimmedSearchInput = searchInput.trim();
-    const searchRegex = new RegExp(trimmedSearchInput, 'i');
-    query = {
-      $or: [{ name: { $regex: searchRegex } }],
-    };
-  }
   try {
-    const subjectAreas = await SubjectArea.find(query)
-      .skip(skip)
-      .limit(limit)
-      .sort({
-        createdAt: -1,
-      })
-      .lean();
+    let allSubjectAreas = await SubjectArea.find().lean();
 
-    res.status(200).json({ subjectAreas, page, totalPages });
+    if (req.query.search) {
+      const search = req.query.search.toLowerCase();
+
+      allSubjectAreas = allSubjectAreas.filter((subjectArea) =>
+        subjectArea.name.toLowerCase().includes(search)
+      );
+    }
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const total = allSubjectAreas.length;
+    const totalPages = Math.ceil(total / limit);
+
+    // Apply pagination to the result
+    const paginatedSubjectAreas = allSubjectAreas.slice(startIndex, endIndex);
+
+    // Send response
+    res.status(200).json({
+      subjectAreas: paginatedSubjectAreas,
+      page,
+      totalPages,
+    });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
