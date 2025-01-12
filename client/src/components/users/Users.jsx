@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import useGetUsers from '../../hooks/users/useGetUsers';
 import useCreateUser from '../../hooks/users/useCreateUser';
 import useEditUser from '../../hooks/users/useEditUser';
@@ -14,11 +15,15 @@ import {
   Modal,
 } from 'flowbite-react';
 import { HiSearch } from 'react-icons/hi';
+import { GoInfo } from 'react-icons/go';
+import { TbEdit } from 'react-icons/tb';
+import { MdOutlineDelete } from 'react-icons/md';
 import UserDetailsModal from './UserDetailsModal';
 import CreateUserModal from './CreateUserModal';
 import EditUserModal from './EditUserModal';
 
 const Users = () => {
+  const { user: loggedInUser } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
   const [semesterFilter, setSemesterFilter] = useState('');
@@ -276,9 +281,11 @@ const Users = () => {
               </Select>
             </div>
           </div>
-          <div className="flex justify-end">
-            <Button onClick={openCreateModal}>Create User</Button>
-          </div>
+          {['admin', 'coordinator'].includes(loggedInUser?.role) && (
+            <div className="flex justify-end">
+              <Button onClick={openCreateModal}>Create User</Button>
+            </div>
+          )}
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <Table hoverable>
               <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800">
@@ -338,20 +345,35 @@ const Users = () => {
                         className="button"
                         onClick={() => openModal(user)}
                       >
-                        Details
+                        <GoInfo
+                          className="text-blue-400"
+                          style={{ fontSize: '1.5rem' }}
+                        />
                       </button>
-                      <button
-                        className="button"
-                        onClick={() => openEditModal(user)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="button"
-                        onClick={() => openDeleteModal(user)}
-                      >
-                        Delete
-                      </button>
+                      {['admin', 'coordinator'].includes(
+                        loggedInUser?.role
+                      ) && (
+                        <>
+                          <button
+                            className="button"
+                            onClick={() => openEditModal(user)}
+                          >
+                            <TbEdit
+                              className="text-green-400"
+                              style={{ fontSize: '1.5rem' }}
+                            />
+                          </button>
+                          <button
+                            className="button"
+                            onClick={() => openDeleteModal(user)}
+                          >
+                            <MdOutlineDelete
+                              className="text-red-400"
+                              style={{ fontSize: '1.5rem' }}
+                            />
+                          </button>
+                        </>
+                      )}
                     </Table.Cell>
                   </Table.Row>
                 ))}
@@ -376,6 +398,7 @@ const Users = () => {
         isOpen={isCreateModalOpen}
         onClose={closeCreateModal}
         user={newUser}
+        loggedInUser={loggedInUser}
         onChange={handleCreateUserChange}
         onSubmit={handleCreateUserSubmit}
         studyProgrammes={studyProgrammes}

@@ -1,13 +1,21 @@
 import { Modal, Button, Label, TextInput, Select } from 'flowbite-react';
 
-const EditMobilityModal = ({ isOpen, onClose, institutions, studyProgrammes, mobility, onChange, onSubmit }) => {
+const EditMobilityModal = ({
+  isOpen,
+  onClose,
+  institutions,
+  studyProgrammes,
+  mobility,
+  onChange,
+  onSubmit,
+}) => {
   if (!mobility) return null;
   return (
     <Modal show={isOpen} onClose={onClose}>
       <Modal.Header>Edit study programme</Modal.Header>
       <Modal.Body>
         <form onSubmit={onSubmit} className="space-y-6">
-        <div>
+          <div>
             <Label htmlFor="type" value="Type" />
             <Select
               id="type"
@@ -57,7 +65,10 @@ const EditMobilityModal = ({ isOpen, onClose, institutions, studyProgrammes, mob
             </Select>
           </div>
           <div>
-            <Label htmlFor="numberOfStudentsOrStaff" value="Number of Students or Staff" />
+            <Label
+              htmlFor="numberOfStudentsOrStaff"
+              value="Number of Students or Staff"
+            />
             <TextInput
               id="numberOfStudentsOrStaff"
               name="numberOfStudentsOrStaff"
@@ -65,6 +76,8 @@ const EditMobilityModal = ({ isOpen, onClose, institutions, studyProgrammes, mob
               value={mobility.numberOfStudentsOrStaff}
               onChange={onChange}
               required
+              max={6}
+              min={1}
             />
           </div>
           <div>
@@ -81,14 +94,24 @@ const EditMobilityModal = ({ isOpen, onClose, institutions, studyProgrammes, mob
             />
           </div>
           <div>
-            <Label htmlFor="homeApplicationDeadline" value="Home Application Deadline" />
+            <Label
+              htmlFor="homeApplicationDeadline"
+              value="Home Application Deadline"
+            />
             <TextInput
               id="homeApplicationDeadline"
               name="homeApplicationDeadline"
               type="date"
-              value={mobility.homeApplicationDeadline ? new Date(mobility.homeApplicationDeadline).toISOString().split('T')[0] : ''}
+              value={
+                mobility.homeApplicationDeadline
+                  ? new Date(mobility.homeApplicationDeadline)
+                      .toISOString()
+                      .split('T')[0]
+                  : ''
+              }
               onChange={onChange}
               required
+              min={new Date().toISOString().split('T')[0]}
             />
           </div>
           <div>
@@ -97,20 +120,36 @@ const EditMobilityModal = ({ isOpen, onClose, institutions, studyProgrammes, mob
               id="nominationDeadline"
               name="nominationDeadline"
               type="date"
-              value={mobility.nominationDeadline ? new Date(mobility.nominationDeadline).toISOString().split('T')[0] : ''}
+              value={
+                mobility.nominationDeadline
+                  ? new Date(mobility.nominationDeadline)
+                      .toISOString()
+                      .split('T')[0]
+                  : ''
+              }
               onChange={onChange}
               required
             />
           </div>
           <div>
-            <Label htmlFor="hostApplicationDeadline" value="Host Application Deadline" />
+            <Label
+              htmlFor="hostApplicationDeadline"
+              value="Host Application Deadline"
+            />
             <TextInput
               id="hostApplicationDeadline"
               name="hostApplicationDeadline"
               type="date"
-              value={mobility.hostApplicationDeadline ? new Date(mobility.hostApplicationDeadline).toISOString().split('T')[0] : ''}
+              value={
+                mobility.hostApplicationDeadline
+                  ? new Date(mobility.hostApplicationDeadline)
+                      .toISOString()
+                      .split('T')[0]
+                  : ''
+              }
               onChange={onChange}
               required
+              min={new Date().toISOString().split('T')[0]}
             />
           </div>
           <div>
@@ -121,6 +160,7 @@ const EditMobilityModal = ({ isOpen, onClose, institutions, studyProgrammes, mob
               value={mobility.season}
               onChange={onChange}
               required
+              min={new Date().toISOString().split('T')[0]}
             />
           </div>
           <Button type="submit">Save</Button>
