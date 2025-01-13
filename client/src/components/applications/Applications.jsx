@@ -5,6 +5,7 @@ import useEditApplication from '../../hooks/applications/useEditApplication';
 import useDeleteApplication from '../../hooks/applications/useDeleteApplication';
 import useGetUsers from '../../hooks/users/useGetUsers';
 import useGetMobilities from '../../hooks/mobilities/useGetMobilities';
+import useGetUser from '../../hooks/users/useGetUser';
 import { useAuth } from '../../context/AuthContext';
 import {
   Table,
@@ -14,6 +15,10 @@ import {
   Button,
   Modal,
 } from 'flowbite-react';
+import { GoInfo } from 'react-icons/go';
+import { TbEdit } from 'react-icons/tb';
+import { MdOutlineDelete } from 'react-icons/md';
+import { IoDocumentAttachOutline } from 'react-icons/io5';
 import ApplicationDetailsModal from './ApplicationDetailsModal';
 import CreateApplicationModal from './CreateApplicationModal';
 import EditApplicationModal from './EditApplicationModal';
@@ -21,6 +26,7 @@ import FilesModal from './FilesModal';
 
 const Applications = () => {
   const { user: loggedUser } = useAuth();
+  const { user: loggedUserData, error, loading } = useGetUser(loggedUser?.id);
 
   let coming = [];
   let leaving = [];
@@ -229,10 +235,8 @@ const Applications = () => {
                 onChange={handleRoleChange}
               >
                 <option value="">All Roles</option>
-                <option value="admin">Admin</option>
                 <option value="student">Student</option>
                 <option value="staff">Staff</option>
-                <option value="coordinator">Coordinator</option>
               </Select>
             </div>
             <div className="max-w-md">
@@ -298,28 +302,40 @@ const Applications = () => {
                       <Table.Cell>{application.rating}</Table.Cell>
                       <Table.Cell>
                         <button
-                          className="button"
+                          className="button mr-2"
                           onClick={() => openModal(application)}
                         >
-                          Details
+                          <GoInfo
+                            className="text-blue-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
                         </button>
                         <button
-                          className="button"
-                          onClick={() => openFilesModal(application)}
-                        >
-                          Attached Files
-                        </button>
-                        <button
-                          className="button"
-                          onClick={() => openDeleteModal(application)}
-                        >
-                          Delete
-                        </button>
-                        <button
-                          className="button"
+                          className="button mr-2"
                           onClick={() => openEditModal(application)}
                         >
-                          Edit
+                          <TbEdit
+                            className="text-green-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
+                        </button>
+                        <button
+                          className="button mr-2"
+                          onClick={() => openDeleteModal(application)}
+                        >
+                          <MdOutlineDelete
+                            className="text-red-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
+                        </button>
+                        <button
+                          className="button mr-2"
+                          onClick={() => openFilesModal(application)}
+                        >
+                          <IoDocumentAttachOutline
+                            className="text-teal-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
                         </button>
                       </Table.Cell>
                     </Table.Row>
@@ -341,28 +357,44 @@ const Applications = () => {
                       <Table.Cell>{application.rating}</Table.Cell>
                       <Table.Cell>
                         <button
-                          className="button"
+                          className="button mr-2"
+                          title="Info"
                           onClick={() => openModal(application)}
                         >
-                          Details
+                          <GoInfo
+                            className="text-blue-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
                         </button>
                         <button
-                          className="button"
-                          onClick={() => openFilesModal(application)}
-                        >
-                          Attached Files
-                        </button>
-                        <button
-                          className="button"
-                          onClick={() => openDeleteModal(application)}
-                        >
-                          Delete
-                        </button>
-                        <button
-                          className="button"
+                          className="button mr-2"
+                          title="Edit"
                           onClick={() => openEditModal(application)}
                         >
-                          Edit
+                          <TbEdit
+                            className="text-green-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
+                        </button>
+                        <button
+                          className="button mr-2"
+                          title="Delete"
+                          onClick={() => openDeleteModal(application)}
+                        >
+                          <MdOutlineDelete
+                            className="text-red-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
+                        </button>
+                        <button
+                          className="button mr-2"
+                          title="Document attachments"
+                          onClick={() => openFilesModal(application)}
+                        >
+                          <IoDocumentAttachOutline
+                            className="text-teal-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
                         </button>
                       </Table.Cell>
                     </Table.Row>
@@ -384,31 +416,45 @@ const Applications = () => {
                       <Table.Cell>{application.rating}</Table.Cell>
                       <Table.Cell>
                         <button
-                          className="button"
+                          className="button mr-2"
+                          title="Info"
                           onClick={() => openModal(application)}
                         >
-                          Details
+                          <GoInfo
+                            className="text-blue-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
                         </button>
                         <button
-                          className="button"
-                          onClick={() => openFilesModal(application)}
+                          className="button mr-2"
+                          title="Edit"
+                          onClick={() => openEditModal(application)}
                         >
-                          Attached Files
+                          <TbEdit
+                            className="text-green-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
                         </button>
                         <button
-                          className="button"
+                          className="button mr-2"
+                          title="Delete"
                           onClick={() => openDeleteModal(application)}
                         >
-                          Delete
+                          <MdOutlineDelete
+                            className="text-red-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
                         </button>
-                        {loggedUser.role === 'admin' && (
-                          <button
-                            className="button"
-                            onClick={() => openEditModal(application)}
-                          >
-                            Edit
-                          </button>
-                        )}
+                        <button
+                          className="button mr-2"
+                          title="Document attachments"
+                          onClick={() => openFilesModal(application)}
+                        >
+                          <IoDocumentAttachOutline
+                            className="text-teal-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
+                        </button>
                       </Table.Cell>
                     </Table.Row>
                   ))}
@@ -429,31 +475,35 @@ const Applications = () => {
                       <Table.Cell>{application.rating}</Table.Cell>
                       <Table.Cell>
                         <button
-                          className="button"
+                          className="button mr-2"
+                          title="Info"
                           onClick={() => openModal(application)}
                         >
-                          Details
+                          <GoInfo
+                            className="text-blue-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
                         </button>
                         <button
-                          className="button"
-                          onClick={() => openFilesModal(application)}
-                        >
-                          Attached Files
-                        </button>
-                        <button
-                          className="button"
+                          className="button mr-2"
+                          title="Delete"
                           onClick={() => openDeleteModal(application)}
                         >
-                          Delete
+                          <MdOutlineDelete
+                            className="text-red-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
                         </button>
-                        {loggedUser.role === 'admin' && (
-                          <button
-                            className="button"
-                            onClick={() => openEditModal(application)}
-                          >
-                            Edit
-                          </button>
-                        )}
+                        <button
+                          className="button mr-2"
+                          title="Attach documents"
+                          onClick={() => openFilesModal(application)}
+                        >
+                          <IoDocumentAttachOutline
+                            className="text-teal-400"
+                            style={{ fontSize: '1.5rem' }}
+                          />
+                        </button>
                       </Table.Cell>
                     </Table.Row>
                   ))}
@@ -488,6 +538,7 @@ const Applications = () => {
         application={newApplication}
         users={users}
         loggedUser={loggedUser}
+        loggedUserData={loggedUserData}
         mobilities={mobilities}
         onChange={handleCreateApplicationChange}
         onSubmit={handleCreateApplicationSubmit}

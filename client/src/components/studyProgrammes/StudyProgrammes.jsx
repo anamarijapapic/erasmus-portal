@@ -172,6 +172,14 @@ const StudyProgrammes = () => {
     refreshStudyProgrammes();
   };
 
+  const handleReset = (event) => {
+    setSearchQuery('');
+    setDepartmentFilter('');
+    setAcademicEqfLevelFilter('');
+    setSubjectAreaFilter('');
+    setLimit(10);
+  };
+
   return (
     <>
       <section className="py-10 bg-white dark:bg-gray-900">
@@ -266,11 +274,18 @@ const StudyProgrammes = () => {
               </Select>
             </div>
           </div>
-          {['admin', 'coordinator'].includes(loggedInUser?.role) && (
-            <div className="flex justify-end">
-              <Button onClick={openCreateModal}>Create Study Programme</Button>
-            </div>
-          )}
+
+          <div className="flex justify-end">
+            <Button className="m-1" onClick={handleReset}>
+              Clear
+            </Button>
+            {['admin', 'coordinator'].includes(loggedInUser?.role) && (
+              <Button className="m-1" onClick={openCreateModal}>
+                Create Study Programme
+              </Button>
+            )}
+          </div>
+
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <Table hoverable>
               <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800">
@@ -298,6 +313,7 @@ const StudyProgrammes = () => {
                     <Table.Cell>
                       <button
                         className="button mr-2"
+                        title="Info"
                         onClick={() => openModal(studyProgramme)}
                       >
                         <GoInfo
@@ -311,6 +327,7 @@ const StudyProgrammes = () => {
                         <>
                           <button
                             className="button mr-2"
+                            title="Edit"
                             onClick={() => openEditModal(studyProgramme)}
                           >
                             <TbEdit
@@ -320,6 +337,7 @@ const StudyProgrammes = () => {
                           </button>
                           <button
                             className="button mr-2"
+                            title="Delete"
                             onClick={() => openDeleteModal(studyProgramme)}
                           >
                             <MdOutlineDelete

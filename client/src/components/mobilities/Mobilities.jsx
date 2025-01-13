@@ -24,7 +24,6 @@ import CreateMobilityModal from './CreateMobilityModal';
 import EditMobilityModal from './EditMobilityModal';
 
 const Mobilities = () => {
-  const { user: loggedInUser } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [homeInstitutionFilter, setHomeInstitutionFilter] = useState('');
   const [hostInstitutionFilter, setHostInstitutionFilter] = useState('');
@@ -364,6 +363,7 @@ const Mobilities = () => {
                     <Table.Cell>
                       <button
                         className="button mr-2"
+                        title="Info"
                         onClick={() => openModal(mobility)}
                       >
                         <GoInfo
@@ -373,6 +373,7 @@ const Mobilities = () => {
                       </button>
                       <button
                         className="button mr-2"
+                        title="Edit"
                         onClick={() => openEditModal(mobility)}
                       >
                         <TbEdit
@@ -382,6 +383,7 @@ const Mobilities = () => {
                       </button>
                       <button
                         className="button mr-2"
+                        title="Delete"
                         onClick={() => openDeleteModal(mobility)}
                       >
                         <MdOutlineDelete

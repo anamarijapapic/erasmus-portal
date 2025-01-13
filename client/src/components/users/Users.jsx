@@ -193,6 +193,14 @@ const Users = () => {
     refreshUsers();
   };
 
+  const handleReset = (event) => {
+    setSearchQuery('');
+    setRoleFilter('');
+    setSemesterFilter('');
+    setYearOfStudyFilter('');
+    setLimit(10);
+  };
+
   return (
     <>
       <section className="py-10 bg-white dark:bg-gray-900">
@@ -281,11 +289,16 @@ const Users = () => {
               </Select>
             </div>
           </div>
-          {['admin', 'coordinator'].includes(loggedInUser?.role) && (
-            <div className="flex justify-end">
-              <Button onClick={openCreateModal}>Create User</Button>
-            </div>
-          )}
+          <div className="flex justify-end">
+            <Button className="m-1" onClick={handleReset}>
+              Clear
+            </Button>
+            {['admin', 'coordinator'].includes(loggedInUser?.role) && (
+              <Button className="m-1" onClick={openCreateModal}>
+                Create User
+              </Button>
+            )}
+          </div>
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <Table hoverable>
               <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-800">
@@ -295,18 +308,11 @@ const Users = () => {
                 </p>
               </caption>
               <Table.Head>
-                <Table.HeadCell>First Name</Table.HeadCell>
-                <Table.HeadCell>Last Name</Table.HeadCell>
+                <Table.HeadCell>Name</Table.HeadCell>
                 <Table.HeadCell>Email</Table.HeadCell>
-                <Table.HeadCell>Gender</Table.HeadCell>
                 <Table.HeadCell>Date of Birth</Table.HeadCell>
-                <Table.HeadCell>Place of Birth</Table.HeadCell>
                 <Table.HeadCell>Citizenship</Table.HeadCell>
                 <Table.HeadCell>PIN/OIB</Table.HeadCell>
-                <Table.HeadCell>ID Card Number</Table.HeadCell>
-                <Table.HeadCell>Address</Table.HeadCell>
-                <Table.HeadCell>Contact Number</Table.HeadCell>
-                <Table.HeadCell>Semester</Table.HeadCell>
                 <Table.HeadCell>Year of Study</Table.HeadCell>
                 <Table.HeadCell>Role</Table.HeadCell>
                 <Table.HeadCell>Study Program</Table.HeadCell>
@@ -317,24 +323,15 @@ const Users = () => {
               <Table.Body className="divide-y">
                 {users.map((user) => (
                   <Table.Row key={user._id}>
-                    <Table.Cell>{user.firstName}</Table.Cell>
-                    <Table.Cell>{user.lastName}</Table.Cell>
+                    <Table.Cell>
+                      {user.firstName} {user.lastName}
+                    </Table.Cell>
                     <Table.Cell>{user.email}</Table.Cell>
-                    <Table.Cell>{user.gender}</Table.Cell>
                     <Table.Cell>
                       {new Date(user.dateOfBirth).toLocaleDateString()}
                     </Table.Cell>
-                    <Table.Cell>{user.placeOfBirth}</Table.Cell>
                     <Table.Cell>{user.citizenship}</Table.Cell>
                     <Table.Cell>{user.pinOIB}</Table.Cell>
-                    <Table.Cell>{user.idCardNumber}</Table.Cell>
-                    <Table.Cell>{user.address}</Table.Cell>
-                    <Table.Cell>
-                      <a href={`tel:${user.contactNumber}`}>
-                        {user.contactNumber}
-                      </a>
-                    </Table.Cell>
-                    <Table.Cell>{user.semester}</Table.Cell>
                     <Table.Cell>{user.yearOfStudy}</Table.Cell>
                     <Table.Cell>{user.role}</Table.Cell>
                     <Table.Cell>
@@ -342,7 +339,8 @@ const Users = () => {
                     </Table.Cell>
                     <Table.Cell>
                       <button
-                        className="button"
+                        className="button mr-2"
+                        title="Info"
                         onClick={() => openModal(user)}
                       >
                         <GoInfo
@@ -355,7 +353,8 @@ const Users = () => {
                       ) && (
                         <>
                           <button
-                            className="button"
+                            className="button mr-2"
+                            title="Edit"
                             onClick={() => openEditModal(user)}
                           >
                             <TbEdit
@@ -364,7 +363,8 @@ const Users = () => {
                             />
                           </button>
                           <button
-                            className="button"
+                            className="button mr-2"
+                            title="Delete"
                             onClick={() => openDeleteModal(user)}
                           >
                             <MdOutlineDelete

@@ -6,6 +6,7 @@ const CreateApplicationModal = ({
   application,
   users,
   loggedUser,
+  loggedUserData,
   mobilities,
   onChange,
   onSubmit,
@@ -101,7 +102,21 @@ const CreateApplicationModal = ({
                     const deadlineTime = new Date(
                       mobility.homeApplicationDeadline
                     ).getTime();
-                    return deadlineTime > nowTime && mobility.type !== 'staff';
+                    const subjectAreaOfInterest =
+                      mobility?.hostStudyProgrammeId?.subjectAreaId?._id ===
+                      loggedUserData?.studyProgrammeId?.subjectAreaId?._id;
+                    const differentInstitution =
+                      loggedUserData?.studyProgrammeId?.departmentId
+                        ?.institutionId._id !==
+                      mobility?.hostStudyProgrammeId?.departmentId
+                        ?.institutionId._id;
+
+                    return (
+                      deadlineTime > nowTime &&
+                      mobility.type !== 'staff' &&
+                      subjectAreaOfInterest &&
+                      differentInstitution
+                    );
                   })
                   .map((mobility) => (
                     <option key={mobility._id} value={mobility._id}>
