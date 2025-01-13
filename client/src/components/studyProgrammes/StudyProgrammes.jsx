@@ -313,6 +313,7 @@ const StudyProgrammes = () => {
                     <Table.Cell>
                       <button
                         className="button mr-2"
+                        title="Info"
                         onClick={() => openModal(studyProgramme)}
                       >
                         <GoInfo
@@ -326,6 +327,7 @@ const StudyProgrammes = () => {
                         <>
                           <button
                             className="button mr-2"
+                            title="Edit"
                             onClick={() => openEditModal(studyProgramme)}
                           >
                             <TbEdit
@@ -335,6 +337,7 @@ const StudyProgrammes = () => {
                           </button>
                           <button
                             className="button mr-2"
+                            title="Delete"
                             onClick={() => openDeleteModal(studyProgramme)}
                           >
                             <MdOutlineDelete

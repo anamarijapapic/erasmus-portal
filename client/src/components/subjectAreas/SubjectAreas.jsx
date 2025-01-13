@@ -149,6 +149,7 @@ const SubjectAreas = () => {
                     <Table.Cell>
                       <button
                         className="button"
+                        title="Delete"
                         onClick={() => openDeleteModal(subjectArea)}
                       >
                         <MdOutlineDelete

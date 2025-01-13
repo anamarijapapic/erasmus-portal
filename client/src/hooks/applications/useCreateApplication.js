@@ -7,7 +7,6 @@ const useCreateApplication = () => {
 
   const createApplication = async (application) => {
     try {
-      console.log('ode si ali je log null: ', JSON.stringify(loggedUser));
       if (loggedUser.role === 'student' || loggedUser.role === 'staff') {
         application.userId = loggedUser.id;
       }

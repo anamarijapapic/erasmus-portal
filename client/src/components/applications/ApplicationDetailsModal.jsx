@@ -64,7 +64,7 @@ const ApplicationDetailsModal = ({ isOpen, onClose, application }) => {
             {application.mobilityId.hostStudyProgrammeId.departmentId.name}
           </p>
           <p>
-            <strong>Host department contant person:</strong>{' '}
+            <strong>Host department contact person:</strong>{' '}
             {
               application.mobilityId.hostStudyProgrammeId.departmentId
                 .contactPersonId.firstName
@@ -75,7 +75,7 @@ const ApplicationDetailsModal = ({ isOpen, onClose, application }) => {
             }
           </p>
           <p>
-            <strong>Host department contant person contact data:</strong>{' '}
+            <strong>Host department contact person contact data:</strong>{' '}
             {
               application.mobilityId.hostStudyProgrammeId.departmentId
                 .contactPersonId.email

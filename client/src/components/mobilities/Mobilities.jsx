@@ -363,6 +363,7 @@ const Mobilities = () => {
                     <Table.Cell>
                       <button
                         className="button mr-2"
+                        title="Info"
                         onClick={() => openModal(mobility)}
                       >
                         <GoInfo
@@ -372,6 +373,7 @@ const Mobilities = () => {
                       </button>
                       <button
                         className="button mr-2"
+                        title="Edit"
                         onClick={() => openEditModal(mobility)}
                       >
                         <TbEdit
@@ -381,6 +383,7 @@ const Mobilities = () => {
                       </button>
                       <button
                         className="button mr-2"
+                        title="Delete"
                         onClick={() => openDeleteModal(mobility)}
                       >
                         <MdOutlineDelete
