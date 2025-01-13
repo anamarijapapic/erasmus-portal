@@ -1,6 +1,14 @@
 import { Modal, Button, Label, TextInput, Select } from 'flowbite-react';
 
-const EditStudyProgrammeModal = ({ isOpen, onClose, departments, subjectAreas, studyProgramme, onChange, onSubmit }) => {
+const EditStudyProgrammeModal = ({
+  isOpen,
+  onClose,
+  departments,
+  subjectAreas,
+  studyProgramme,
+  onChange,
+  onSubmit,
+}) => {
   if (!studyProgramme) return null;
 
   return (
@@ -8,7 +16,7 @@ const EditStudyProgrammeModal = ({ isOpen, onClose, departments, subjectAreas, s
       <Modal.Header>Edit study programme</Modal.Header>
       <Modal.Body>
         <form onSubmit={onSubmit} className="space-y-6">
-        <div>
+          <div>
             <Label htmlFor="name" value="Name" />
             <TextInput
               id="name"

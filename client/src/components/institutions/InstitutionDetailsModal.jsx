@@ -1,4 +1,4 @@
-import { Modal, Button, Table } from 'flowbite-react';
+import { Modal, Button } from 'flowbite-react';
 
 const InstitutionDetailsModal = ({ isOpen, onClose, institution }) => {
   if (!institution) return null;

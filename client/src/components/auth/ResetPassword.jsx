@@ -1,5 +1,3 @@
-// ResetPassword.jsx
-
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import usePostResetPassword from '../../hooks/auth/usePostResetPassword';

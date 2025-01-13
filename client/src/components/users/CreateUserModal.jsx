@@ -68,7 +68,7 @@ const CreateUserModal = ({
               value={user.dateOfBirth}
               onChange={onChange}
               required
-              max={new Date().toISOString().split("T")[0]} 
+              max={new Date().toISOString().split('T')[0]}
             />
           </div>
           <div>

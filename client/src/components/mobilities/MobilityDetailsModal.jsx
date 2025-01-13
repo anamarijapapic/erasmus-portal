@@ -11,16 +11,27 @@ const MobilityDetailsModal = ({ isOpen, onClose, mobility }) => {
             <strong>Type:</strong> {mobility.type}
           </p>
           <p>
-            <strong>Home institution:</strong> {mobility.homeInstitutionId.erasmusCode}{' '}{mobility.homeInstitutionId.name}{' '}{mobility.homeInstitutionId.country}
+            <strong>Home institution:</strong>{' '}
+            {mobility.homeInstitutionId.erasmusCode}{' '}
+            {mobility.homeInstitutionId.name}{' '}
+            {mobility.homeInstitutionId.country}
           </p>
           <p>
-            <strong>Department name:</strong> {mobility.hostStudyProgrammeId.departmentId.name}
+            <strong>Department name:</strong>{' '}
+            {mobility.hostStudyProgrammeId.departmentId.name}
           </p>
           <p>
-            <strong>Host institution:</strong> {mobility.hostStudyProgrammeId.departmentId.institutionId.erasmusCode}{' '}{mobility.hostStudyProgrammeId.departmentId.institutionId.name}{' '}{mobility.hostStudyProgrammeId.departmentId.institutionId.country}
+            <strong>Host institution:</strong>{' '}
+            {
+              mobility.hostStudyProgrammeId.departmentId.institutionId
+                .erasmusCode
+            }{' '}
+            {mobility.hostStudyProgrammeId.departmentId.institutionId.name}{' '}
+            {mobility.hostStudyProgrammeId.departmentId.institutionId.country}
           </p>
           <p>
-            <strong>Number of participants:</strong> {mobility.numberOfStudentsOrStaff}
+            <strong>Number of participants:</strong>{' '}
+            {mobility.numberOfStudentsOrStaff}
           </p>
           <p>
             <strong>Duration:</strong> {mobility.duration} months
@@ -29,27 +40,35 @@ const MobilityDetailsModal = ({ isOpen, onClose, mobility }) => {
             <strong>Season:</strong> {mobility.season}
           </p>
           <p>
-            <strong>Home application deadline:</strong> {new Date(mobility.homeApplicationDeadline).toLocaleDateString('en-US', {
+            <strong>Home application deadline:</strong>{' '}
+            {new Date(mobility.homeApplicationDeadline).toLocaleDateString(
+              'en-US',
+              {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              }
+            )}
+          </p>
+          <p>
+            <strong>Nomination deadline:</strong>{' '}
+            {new Date(mobility.nominationDeadline).toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
             })}
           </p>
           <p>
-            <strong>Nomination deadline:</strong> {new Date(mobility.nominationDeadline).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
+            <strong>Host application deadline:</strong>{' '}
+            {new Date(mobility.hostApplicationDeadline).toLocaleDateString(
+              'en-US',
+              {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              }
+            )}
           </p>
-          <p>
-            <strong>Host application deadline:</strong> {new Date(mobility.hostApplicationDeadline).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </p>
-
         </div>
       </Modal.Body>
       <Modal.Footer>

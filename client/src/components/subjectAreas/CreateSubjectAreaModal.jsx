@@ -1,6 +1,12 @@
-import { Modal, Button, Label, TextInput, Select } from 'flowbite-react';
+import { Modal, Button, Label, TextInput } from 'flowbite-react';
 
-const CreateSubjectAreaModal = ({ isOpen, onClose, subjectArea, onChange, onSubmit }) => {
+const CreateSubjectAreaModal = ({
+  isOpen,
+  onClose,
+  subjectArea,
+  onChange,
+  onSubmit,
+}) => {
   return (
     <Modal show={isOpen} onClose={onClose}>
       <Modal.Header>Create subject area</Modal.Header>

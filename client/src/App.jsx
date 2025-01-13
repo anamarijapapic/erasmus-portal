@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-// import { useAuth } from './context/AuthContext';
 import CustomNavbar from './components/shared/CustomNavbar';
 import CustomFooter from './components/shared/CustomFooter';
 import Home from './components/home/Home';
@@ -9,14 +8,13 @@ import ResetPassword from './components/auth/ResetPassword';
 import NotFound from './components/shared/NotFound';
 import Users from './components/users/Users';
 import SubjectAreas from './components/subjectAreas/SubjectAreas';
-import StudyProgrammes from './components/studyProgrammes/studyProgrammes';
-import Departments from './components/departments/departments';
+import StudyProgrammes from './components/studyProgrammes/StudyProgrammes';
+import Departments from './components/departments/Departments';
 import Institutitons from './components/institutions/Institutions';
 import Applications from './components/applications/Applications';
 import Mobilities from './components/mobilities/Mobilities';
 
 function App() {
-  // const { user } = useAuth();
   return (
     <BrowserRouter>
       <CustomNavbar />

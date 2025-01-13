@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const subjectAreasData = require('./data/subjectareas.json');
 const SubjectArea = require('../models/subjectArea.model.js');
 

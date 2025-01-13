@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const studyProgrammesData = require('./data/studyprogrammes.json');
 const StudyProgramme = require('../models/studyProgramme.model.js');
 

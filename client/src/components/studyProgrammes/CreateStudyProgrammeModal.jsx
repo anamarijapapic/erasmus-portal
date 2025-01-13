@@ -1,6 +1,14 @@
 import { Modal, Button, Label, TextInput, Select } from 'flowbite-react';
 
-const CreateStudyProgrammeModal = ({ isOpen, onClose, departments, subjectAreas, studyProgramme, onChange, onSubmit }) => {
+const CreateStudyProgrammeModal = ({
+  isOpen,
+  onClose,
+  departments,
+  subjectAreas,
+  studyProgramme,
+  onChange,
+  onSubmit,
+}) => {
   return (
     <Modal show={isOpen} onClose={onClose}>
       <Modal.Header>Create study programme</Modal.Header>

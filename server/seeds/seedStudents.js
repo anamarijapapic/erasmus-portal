@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const { faker } = require('@faker-js/faker');
 const User = require('../models/user.model.js');
 const genders = require('../enums/genders.js');

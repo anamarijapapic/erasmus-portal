@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
 import useGetMobilities from '../../hooks/mobilities/useGetMobilities';
 import useCreateMobility from '../../hooks/mobilities/useCreateMobility';
 import useEditMobility from '../../hooks/mobilities/useEditMobility';
@@ -10,7 +9,6 @@ import useGetInstitutions from '../../hooks/institutions/useGetInstitutions';
 import {
   Table,
   Pagination,
-  TextInput,
   Label,
   Select,
   Button,

@@ -17,13 +17,15 @@ const StudyProgrammeDetailsModal = ({ isOpen, onClose, studyProgramme }) => {
             <strong>Address:</strong> {studyProgramme.departmentId.address}
           </p>
           <p>
-            <strong>Institution:</strong> {studyProgramme.departmentId.institutionId.name}
+            <strong>Institution:</strong>{' '}
+            {studyProgramme.departmentId.institutionId.name}
           </p>
           <p>
             <strong>Subject area:</strong> {studyProgramme.subjectAreaId.name}
           </p>
           <p>
-            <strong>Academic eqf level:</strong> {studyProgramme.academicEqfLevel}
+            <strong>Academic eqf level:</strong>{' '}
+            {studyProgramme.academicEqfLevel}
           </p>
         </div>
       </Modal.Body>
