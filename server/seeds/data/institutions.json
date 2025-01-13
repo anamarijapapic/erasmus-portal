@@ -1,0 +1,7 @@
+[
+    {"_id":"678422bac105e079525a563a","name":"University of Split","erasmusCode":"HR SPLIT01","country":"Croatia","contactPersonId":"67841d19f5aeb9ddf6aa71ec","address":"Ulica Ruđera Boškovića 31, 21000 Split"},
+    {"_id":"6784232ec105e079525a5640","name":"Graz University of Technology","erasmusCode":"A GRAZ02","country":"Austria","contactPersonId":"67841d19f5aeb9ddf6aa71ef","address":"Rechbauerstraße 12, 8010 Graz"},
+    {"_id":"678423a4c105e079525a5646","name":"Universite de Bretagne Occidental","erasmusCode":"F BREST01","country":"France","contactPersonId":"67841d1af5aeb9ddf6aa71f2","address":"3 rue des Archives, CS93837, 29238 Brest cedex 3"},
+    {"_id":"67842407c105e079525a564c","name":"University of Maribor","erasmusCode":"SI MARIBOR01","country":"Slovenia","contactPersonId":"67841d1af5aeb9ddf6aa71f4","address":"Slomškov trg 15, 2000 Maribor"},
+    {"_id":"6784247ac105e079525a5652","name":"University of Ljubljana","erasmusCode":"SI LJUBLJA01","country":"Slovenia","contactPersonId":"67841d1af5aeb9ddf6aa71f6","address":"Kongresni trg 12, 1000 Ljubljana"}
+]
